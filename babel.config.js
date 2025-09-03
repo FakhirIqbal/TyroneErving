@@ -12,5 +12,15 @@ module.exports = {
         enableFabric: true, // Enable if using React Native Fabric (New Architecture)
       },
     ],
+
+    // Support for .env variables
+    [
+      'module:react-native-dotenv',
+      {
+        envName: 'APP_ENV',
+        moduleName: '@env',
+        path: '.env',
+      },
+    ],
   ],
 };

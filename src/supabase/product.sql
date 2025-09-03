@@ -1,25 +1,36 @@
 CREATE OR REPLACE FUNCTION get_all_glasses(
         _limit INTEGER DEFAULT 10,
         _offset INTEGER DEFAULT 0,
-        _filter TEXT DEFAULT NULL
+        _filter TEXT DEFAULT NULL,
+        _search TEXT DEFAULT NULL
     ) RETURNS JSONB LANGUAGE plpgsql AS $$
 DECLARE result JSONB;
 paginated_glasses JSONB;
 total_count INTEGER;
-BEGIN -- Get total count with optional filter
+BEGIN -- Get total count with optional filter and search
 SELECT COUNT(*) INTO total_count
 FROM glasses g
 WHERE (
-        _filter IS NULL
-        OR _filter = 'All'
-        OR g.for_gender = _filter
-        OR (
-            _filter = 'New Arrivals'
-            AND g.created_at >= NOW() - INTERVAL '3 hours'
+        (
+            _filter IS NULL
+            OR _filter = 'All'
+            OR g.for_gender = _filter
+            OR (
+                _filter = 'New Arrivals'
+                AND g.created_at >= NOW() - INTERVAL '3 hours'
+            )
         )
-        OR g.name include _filter
+    )
+    AND (
+        _search IS NULL
+        OR _search = ''
+        OR (
+            g.name ILIKE '%' || _search || '%'
+            OR g.description ILIKE '%' || _search || '%'
+            OR g.prescription ILIKE '%' || _search || '%'
+        )
     );
--- Get paginated glasses with same filter
+-- Get paginated glasses with same filter and search
 SELECT jsonb_agg(glass_obj) INTO paginated_glasses
 FROM (
         SELECT jsonb_build_object(
@@ -52,9 +63,24 @@ FROM (
             ) AS glass_obj
         FROM glasses g
         WHERE (
-                _filter IS NULL
-                OR _filter = 'All'
-                OR g.for_gender = _filter
+                (
+                    _filter IS NULL
+                    OR _filter = 'All'
+                    OR g.for_gender = _filter
+                    OR (
+                        _filter = 'New Arrivals'
+                        AND g.created_at >= NOW() - INTERVAL '3 hours'
+                    )
+                )
+            )
+            AND (
+                _search IS NULL
+                OR _search = ''
+                OR (
+                    g.name ILIKE '%' || _search || '%'
+                    OR g.description ILIKE '%' || _search || '%'
+                    OR g.prescription ILIKE '%' || _search || '%'
+                )
             )
         ORDER BY g.name
         LIMIT _limit OFFSET _offset

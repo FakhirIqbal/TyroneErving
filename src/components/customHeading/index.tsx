@@ -2,7 +2,12 @@ import React from 'react';
 import { COLORS } from '../../utils/theme';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import { TextBiggest, TextSmall } from '../common/customText';
+import { Font } from '../../utils/ImagePath';
 
 type Props = {
   text: string;
@@ -18,13 +23,13 @@ const customHeading: React.FC<Props> = ({ style, text, reverse = false }) => {
     <View style={[styles.container, style]}>
       {reverse ? (
         <>
-          <Text style={styles.bold}>{firstWord} </Text>
-          <Text style={styles.normal}>{secondWord}</Text>
+          <TextBiggest textStyle={styles.bold}>{firstWord} </TextBiggest>
+          <TextBiggest textStyle={styles.normal}>{secondWord}</TextBiggest>
         </>
       ) : (
         <>
-          <Text style={styles.normal}>{firstWord} </Text>
-          <Text style={styles.bold}>{secondWord}</Text>
+          <TextBiggest textStyle={styles.normal}>{firstWord} </TextBiggest>
+          <TextBiggest textStyle={styles.bold}>{secondWord}</TextBiggest>
         </>
       )}
     </View>
@@ -38,15 +43,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
     marginVertical: hp(1.5),
+    alignItems: 'baseline',
   },
   normal: {
-    fontWeight: '300',
-    fontSize: RFValue(22),
+    fontFamily: Font.light,
+    // fontSize: RFValue(22),
     color: COLORS.black,
   },
   bold: {
-    fontSize: RFValue(22),
-    fontWeight: '700',
+    // fontSize: RFValue(22),
+    // fontWeight: '700',
+    fontFamily: Font.bold,
     color: COLORS.black,
   },
 });

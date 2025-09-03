@@ -114,11 +114,11 @@ const Category = ({ navigation }: any) => {
           onValueChange={setPrice}
         />
 
-        <View style={styles.productContainer}>
+        {/* <View style={styles.productContainer}>
           {products.map((item, index) => (
             <ProductCard key={item.id} item={item} />
           ))}
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );

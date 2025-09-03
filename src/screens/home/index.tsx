@@ -38,7 +38,7 @@ const Home = ({ navigation }: any) => {
   // const categories = ['All', 'New Arrivals', 'Top Pick', 'Men', 'Women'];
   const categories = ['All', 'New Arrivals', 'male', 'female'];
   const [selected, setSelected] = useState('All');
-  const [query, setQuery] = useState('');
+
   const {
     allProducts,
     initialLoading,
@@ -47,6 +47,8 @@ const Home = ({ navigation }: any) => {
     isLoading,
     hasMorePages,
     error,
+    handleSearch,
+    search,
   } = useProducts(selected);
   console.log('Trn', allProducts);
   const addCart = useCallback(
@@ -104,8 +106,8 @@ const Home = ({ navigation }: any) => {
           <TextInput
             placeholder="Search for *Sunglasses*"
             style={styles.input}
-            value={query}
-            onChangeText={setQuery}
+            value={search}
+            onChangeText={handleSearch}
             placeholderTextColor={COLORS.darkGray}
           />
           <Feather

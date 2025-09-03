@@ -2647,6 +2647,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/stripe-react-native@npm:^0.51.0":
+  version: 0.51.0
+  resolution: "@stripe/stripe-react-native@npm:0.51.0"
+  peerDependencies:
+    expo: ">=46.0.9"
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 10c0/b0bd2f1022e00a1094a497902d44a339207fd361ddb1a463540908de96bbb2f8e431d92571cdd61298b5bbcd05c327b49513c878b78a20dfe32d12786d601aa5
+  languageName: node
+  linkType: hard
+
 "@supabase/auth-js@npm:2.71.0":
   version: 2.71.0
   resolution: "@supabase/auth-js@npm:2.71.0"
@@ -3315,6 +3329,7 @@ __metadata:
     "@react-navigation/stack": "npm:^7.3.4"
     "@reduxjs/toolkit": "npm:^2.8.2"
     "@shopify/react-native-skia": "npm:^2.0.7"
+    "@stripe/stripe-react-native": "npm:^0.51.0"
     "@supabase/supabase-js": "npm:^2.50.0"
     "@types/jest": "npm:^29.5.13"
     "@types/react": "npm:^19.1.0"
@@ -3332,12 +3347,14 @@ __metadata:
     react-native-bcrypt: "npm:^2.4.0"
     react-native-compressor: "npm:^1.12.0"
     react-native-country-picker-modal: "npm:^2.0.0"
+    react-native-dotenv: "npm:^3.4.11"
     react-native-element-dropdown: "npm:^2.12.4"
     react-native-fast-image: "npm:^8.6.3"
     react-native-filament: "npm:^1.8.0"
     react-native-gesture-handler: "npm:^2.26.0"
     react-native-image-crop-picker: "npm:^0.51.0"
     react-native-linear-gradient: "npm:^2.8.3"
+    react-native-mask-input: "npm:^1.2.3"
     react-native-mmkv: "npm:^3.3.0"
     react-native-phone-number-input: "npm:^2.1.0"
     react-native-reanimated: "npm:^3.18.0"
@@ -4747,6 +4764,13 @@ __metadata:
     no-case: "npm:^3.0.4"
     tslib: "npm:^2.0.3"
   checksum: 10c0/5b859ea65097a7ea870e2c91b5768b72ddf7fa947223fd29e167bcdff58fe731d941c48e47a38ec8aa8e43044c8fbd15cd8fa21689a526bc34b6548197cd5b05
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.4.5":
+  version: 16.6.1
+  resolution: "dotenv@npm:16.6.1"
+  checksum: 10c0/15ce56608326ea0d1d9414a5c8ee6dcf0fffc79d2c16422b4ac2268e7e2d76ff5a572d37ffe747c377de12005f14b3cc22361e79fc7f1061cce81f77d2c973dc
   languageName: node
   linkType: hard
 
@@ -8616,6 +8640,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-dotenv@npm:^3.4.11":
+  version: 3.4.11
+  resolution: "react-native-dotenv@npm:3.4.11"
+  dependencies:
+    dotenv: "npm:^16.4.5"
+  peerDependencies:
+    "@babel/runtime": ^7.20.6
+  checksum: 10c0/9ed4a37fb59030706d17a1cc49d05af9d8fc57dcb2ef97e122b844f3ab6f6331ebc089afac559fe5bddf37806aa282b4118005f1b27aae5e37fdc3fc8bd7625c
+  languageName: node
+  linkType: hard
+
 "react-native-drawer-layout@npm:^4.1.12":
   version: 4.1.12
   resolution: "react-native-drawer-layout@npm:4.1.12"
@@ -8723,6 +8758,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/cd41bf28e9f468173f1e5e768685128ebf8bbf9077710e43b63482c1a76f37bff8ab3d1d6adfd7b4d54e648672356c02bea46c47cdbdb1844ebe5c5caf720114
+  languageName: node
+  linkType: hard
+
+"react-native-mask-input@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "react-native-mask-input@npm:1.2.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/e52f640082c7743eabe68c193ccd4904e5500944bb11cd356ed71fade0cc801c828685ce47f7dae8c48f95a2761768ccfd4264572b1ca0a19e046e0ba1a55aa7
   languageName: node
   linkType: hard
 

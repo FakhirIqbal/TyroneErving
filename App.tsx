@@ -10,14 +10,17 @@ import { supabase } from './src/config/supabase';
 import { ScreenNames } from './src/navigation/ScreenName';
 import Toast from 'react-native-toast-message';
 import Rootstack from './src/navigation/Rootstack';
-
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { STRIPE_PUBLISH_KEY } from '@env';
 function App() {
   const isLogin = false;
 
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <Rootstack />
+        <StripeProvider publishableKey={STRIPE_PUBLISH_KEY}>
+          <Rootstack />
+        </StripeProvider>
         <Toast />
       </PersistGate>
     </Provider>
