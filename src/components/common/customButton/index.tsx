@@ -35,6 +35,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         isDark ? styles.darkButton : styles.defaultButton,
         style,
       ]}
+      disabled={typeof onPress !== 'function' || isloading}
     >
       <View style={styles.content}>
         {isDark && iconName && (

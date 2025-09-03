@@ -3,6 +3,7 @@ import { supabase } from '../config/supabase';
 import { handleRPCPOST, showToast } from '../utils/helper';
 import useUser from '../utils/useUser';
 import { ScreenNames } from '../navigation/ScreenName';
+import { loginData, signupData } from './interface';
 
 const useAuth = () => {
   const { handleSetUser } = useUser();
@@ -25,7 +26,9 @@ const useAuth = () => {
         email: userData.email,
         password: userData.password,
         full_name: userData.fullName,
-        phone_number: userData.phoneNumber,
+        formatted_number: userData?.phoneNumber?.formatted_number,
+        national_number: userData?.phoneNumber?.national_number,
+        country_code: userData?.phoneNumber?.country_code,
         gender: userData.gender,
       });
       if (rpcData?.error) {

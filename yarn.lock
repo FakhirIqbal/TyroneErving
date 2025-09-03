@@ -3321,6 +3321,7 @@ __metadata:
     "@types/react-native-bcrypt": "npm:^2"
     "@types/react-native-vector-icons": "npm:^6.4.18"
     "@types/react-test-renderer": "npm:^19.1.0"
+    base64-arraybuffer: "npm:^1.0.2"
     buffer: "npm:^6.0.3"
     eslint: "npm:^8.19.0"
     jest: "npm:^29.6.3"
@@ -3329,11 +3330,13 @@ __metadata:
     react-hook-form: "npm:^7.58.0"
     react-native: "npm:0.80.0"
     react-native-bcrypt: "npm:^2.4.0"
+    react-native-compressor: "npm:^1.12.0"
     react-native-country-picker-modal: "npm:^2.0.0"
     react-native-element-dropdown: "npm:^2.12.4"
     react-native-fast-image: "npm:^8.6.3"
     react-native-filament: "npm:^1.8.0"
     react-native-gesture-handler: "npm:^2.26.0"
+    react-native-image-crop-picker: "npm:^0.51.0"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-mmkv: "npm:^3.3.0"
     react-native-phone-number-input: "npm:^2.1.0"
@@ -3808,6 +3811,13 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 10c0/9308baf0a7e4838a82bbfd11e01b1cb0f0cf2893bc1676c27c2a8c0e70cbae1c59120c3268517a8ae7fb6376b4639ef81ca22582611dbee4ed28df945134aaee
+  languageName: node
+  linkType: hard
+
+"base64-arraybuffer@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "base64-arraybuffer@npm:1.0.2"
+  checksum: 10c0/3acac95c70f9406e87a41073558ba85b6be9dbffb013a3d2a710e3f2d534d506c911847d5d9be4de458af6362c676de0a5c4c2d7bdf4def502d00b313368e72f
   languageName: node
   linkType: hard
 
@@ -8577,6 +8587,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-compressor@npm:^1.12.0":
+  version: 1.12.0
+  resolution: "react-native-compressor@npm:1.12.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/49ce38eeeb2d121253bc761840a04a93ac7fc7bfef77881e82620575cce0817d9d7cd4d6f3df5d29469e45760b107d22f5b2f7ae7116a95ef44c8d83953a6f20
+  languageName: node
+  linkType: hard
+
 "react-native-country-picker-modal@npm:^2.0.0":
   version: 2.0.0
   resolution: "react-native-country-picker-modal@npm:2.0.0"
@@ -8654,6 +8674,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/0cfab31fdb3241ca7fd8a770d4701de067b237055e8a1e96bcce081606ea720fb05fc60c805c74149927a443b086f0c1d085550a6e3a964cad7af44885cf90b5
+  languageName: node
+  linkType: hard
+
+"react-native-image-crop-picker@npm:^0.51.0":
+  version: 0.51.0
+  resolution: "react-native-image-crop-picker@npm:0.51.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/bd30c16485a8c2d870e35ade370cf1727246e6d5f82c8c351d746d4324112196dc7b0cf8d543f32c2901e0b5c444576c3a79d0d3fa5210e93ff44351a28ae1c3
   languageName: node
   linkType: hard
 

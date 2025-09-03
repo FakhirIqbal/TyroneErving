@@ -1,7 +1,7 @@
 import Toast from 'react-native-toast-message';
 import { supabase } from '../config/supabase';
 
-export const handleRPCPOST = async (reqString: string, reqFunction: any) => {
+export const handleRPCPOST = async (reqString: string, reqFunction?: any) => {
   try {
     const { data, error } = await supabase.rpc(reqString, reqFunction);
 

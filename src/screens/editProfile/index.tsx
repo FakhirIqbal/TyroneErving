@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { COLORS } from '../../utils/theme';
 import { useForm, Controller } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 
 import CustomInput from '../../components/common/customInput';
-import CustomPickImage from '../../components/common/customPickImage';
 import CustomButton from '../../components/common/customButton';
 import CustomDropdown from '../../components/common/customDropdown';
 import CustomPhoneInput from '../../components/common/customPhoneinput';
@@ -24,38 +23,42 @@ import WrapperContainer from '../../components/common/customWrapper';
 import { heightPercentageToDP } from 'react-native-responsive-screen';
 import Header from '../../components/common/Header';
 import Customimage from '../../components/common/customImage';
-
-type ProfileFormData = {
-  name: string;
-  gender: string;
-  phone: string;
-  email: string;
-};
+import EditProHook from './useEditPro';
+import { PhoneNumberValue } from '../../components/common/customPhoneinput/interface';
+import useUser from '../../utils/useUser';
 
 const EditProfile = ({ navigation }: any) => {
   const {
+    onSelect,
     control,
+    errors,
+    profileImage,
     handleSubmit,
-    formState: { errors },
-  } = useForm<ProfileFormData>({
-    defaultValues: {
-      name: '',
-      gender: '',
-      phone: '',
-      email: '',
-    },
-  });
+    onEdit,
+    loading,
+  } = EditProHook();
 
-  const onSubmit = (data: ProfileFormData) => {
+  const onSubmit = (data: any) => {
     console.log('Profile Data:', data);
-    navigation.goBack();
+  };
+  const { user } = useUser();
+  const [isEditing, setIsEditing] = useState(false);
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
   };
 
+  const onEditProfile = () => {
+    if (!isEditing) {
+      return;
+    }
+    const submit = handleSubmit(data => onEdit(data, navigation));
+    return submit();
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1 }}
-    // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+      // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
       <WrapperContainer>
         <ScrollView
@@ -69,45 +72,51 @@ const EditProfile = ({ navigation }: any) => {
         >
           <Header title="Profile" navigation={navigation} />
 
-          <View style={styles.container}>
-            <View>
-              <View
-                style={{
-                  position: 'relative',
-                  alignSelf: 'center',
-                  marginTop: 24,
-                }}
-              >
-                <Customimage
-                  source={{ uri: 'https://i.pravatar.cc/150?img=12' }}
-                  style={styles.avatar}
-                />
+          <View>
+            <View
+              style={{
+                position: 'relative',
+                alignSelf: 'center',
+                marginTop: 24,
+              }}
+            >
+              <Customimage
+                source={{ uri: profileImage?.path || profileImage }}
+                style={styles.avatar}
+              />
+
+              {isEditing && (
                 <SimpleLineIcons
+                  onPress={() => {
+                    onSelect();
+                  }}
                   name="pencil"
                   style={styles.editIcon}
                   size={16}
                   color="#fff"
                 />
-              </View>
-              <Text style={styles.name}>John Smith</Text>
+              )}
+            </View>
+            <Text style={styles.name}>{user?.data?.name}</Text>
 
-              <View>
-                <Controller
-                  control={control}
-                  name="name"
-                  rules={{ required: 'Name is required' }}
-                  render={({ field: { onChange, value } }) => (
-                    <CustomInput
-                      label="Name:"
-                      placeholder="Enter your name"
-                      value={value}
-                      onChangeText={onChange}
-                      error={errors.name?.message}
-                    />
-                  )}
-                />
+            <View>
+              <Controller
+                control={control}
+                name="Name"
+                rules={{ required: 'Name is required' }}
+                render={({ field: { onChange, value } }) => (
+                  <CustomInput
+                    label="Name:"
+                    placeholder="Enter your name"
+                    value={value}
+                    onChangeText={onChange}
+                    error={errors.Name?.message}
+                    editable={isEditing}
+                  />
+                )}
+              />
 
-                <Controller
+              {/* <Controller
                   control={control}
                   name="email"
                   rules={{
@@ -127,26 +136,59 @@ const EditProfile = ({ navigation }: any) => {
                       error={errors.email?.message}
                     />
                   )}
-                />
-
-                <Controller
-                  control={control}
-                  name="phone"
-                  rules={{
-                    required: 'Phone number is required',
-                    minLength: { value: 10, message: 'Too short' },
-                  }}
-                  render={({ field: { onChange, value } }) => (
+                /> */}
+              {/* <Controller
+                control={control}
+                name="phoneNumber"
+                rules={{
+                  required: 'Phone number is required',
+                  validate: (value: PhoneNumberValue) =>
+                    value?.is_valid ? true : 'Invalid phone number format',
+                }}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => {
+                  console.log('Changed Values', value);
+                  return (
                     <CustomPhoneInput
                       label="Phone Number"
                       value={value}
                       onChange={onChange}
-                      error={errors.phone?.message}
+                      error={error?.message}
                     />
-                  )}
-                />
+                  );
+                }}
+              /> */}
 
-                <Controller
+              <Controller
+                control={control}
+                name="phoneNumber"
+                rules={{
+                  required: 'Phone number is required',
+                  validate: (value: PhoneNumberValue) => {
+                    if (!value) return 'Phone number is required';
+                    return value.is_valid
+                      ? true
+                      : 'Invalid phone number format';
+                  },
+                }}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => {
+                  return (
+                    <CustomPhoneInput
+                      label="Phone Number"
+                      value={value}
+                      onChange={onChange}
+                      error={error?.message}
+                      disabled={!isEditing}
+                    />
+                  );
+                }}
+              />
+              {/* <Controller
                   control={control}
                   name="gender"
                   rules={{ required: 'Gender is required' }}
@@ -164,10 +206,10 @@ const EditProfile = ({ navigation }: any) => {
                       error={errors.gender?.message}
                     />
                   )}
-                />
-              </View>
+                /> */}
             </View>
           </View>
+
           <View
             style={{
               flex: 1,
@@ -175,10 +217,15 @@ const EditProfile = ({ navigation }: any) => {
               marginBottom: heightPercentageToDP(4),
             }}
           >
-            <CustomButton
+            {/* <CustomButton
               title="Update"
               onPress={handleSubmit(onSubmit)}
               style={{ width: '100%' }}
+            /> */}
+            <CustomButton
+              title={isEditing ? 'Save Changes' : 'Edit Profile'}
+              onPress={!isEditing ? toggleEdit : onEditProfile}
+              isloading={loading}
             />
           </View>
         </ScrollView>
@@ -191,8 +238,8 @@ export default EditProfile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    // alignItems: 'center',
+    // justifyContent: 'space-between',
   },
   avatar: {
     width: 130,

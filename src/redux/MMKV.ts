@@ -16,9 +16,9 @@ const MMKVStorage = {
     storage.delete(key);
     return Promise.resolve();
   },
-  getallItems: () => {
-    storage.getAllKeys();
-    return Promise.resolve();
+  getallItems: (): Promise<string[]> => {
+    const keys = storage.getAllKeys();
+    return Promise.resolve(keys);
   },
 };
 

@@ -28,6 +28,7 @@ import WrapperContainer from '../../components/common/customWrapper';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import useAuth from '../../services/AuthService';
+import { PhoneNumberValue } from '../../components/common/customPhoneinput/interface';
 
 const SignUp = ({ navigation }: any) => {
   const {
@@ -39,7 +40,7 @@ const SignUp = ({ navigation }: any) => {
       fullName: '',
       email: '',
       gender: '',
-      phoneNumber: '',
+      phoneNumber: undefined,
       termsAccepted: false,
     },
   });
@@ -152,14 +153,18 @@ const SignUp = ({ navigation }: any) => {
               name="phoneNumber"
               rules={{
                 required: 'Phone number is required',
-                minLength: { value: 10, message: 'Too short' },
+                validate: (value: PhoneNumberValue) =>
+                  value?.is_valid ? true : 'Invalid phone number format',
               }}
-              render={({ field: { onChange, value } }) => (
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
                 <CustomPhoneInput
                   label="Phone Number"
                   value={value}
                   onChange={onChange}
-                  error={errors.phoneNumber?.message}
+                  error={error?.message}
                 />
               )}
             />

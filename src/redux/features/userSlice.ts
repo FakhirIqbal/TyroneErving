@@ -8,9 +8,12 @@ interface User {
     fcmToken: string | null;
     name: string;
     is_verified: boolean;
-    phonenumber: string;
+    formatted_number: string;
+    national_number: string;
+    country_code: string;
     id: string;
     token: string;
+    profile_image: string;
   } | null;
 }
 

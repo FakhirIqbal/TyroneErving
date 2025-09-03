@@ -13,6 +13,7 @@ import { ScreenNames } from '../../navigation/ScreenName';
 import Header from '../../components/common/Header';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 import Customimage from '../../components/common/customImage';
+import useUser from '../../utils/useUser';
 
 const menuItems = [
   {
@@ -53,21 +54,27 @@ const menuItems = [
 ];
 
 const Profile = ({ navigation }: any) => {
+  const { user } = useUser();
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.navigationContainer}>
-          <Header title="ProductDetail" navigation={navigation} color={COLORS.white} headingStyle={{ color: COLORS.white }} />
+          <Header
+            title="Profile"
+            navigation={navigation}
+            color={COLORS.white}
+            headingStyle={{ color: COLORS.white }}
+          />
         </View>
 
         <View style={styles.info}>
           <Customimage
-            source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+            source={{ uri: user?.data?.profile_image }}
             style={styles.avatar}
           />
           <View>
-            <Text style={styles.name}>Leslie Alexander</Text>
-            <Text style={styles.email}>leslie@gmail.com</Text>
+            <Text style={styles.name}>{user?.data?.name}</Text>
+            <Text style={styles.email}>{user?.data?.email}</Text>
           </View>
           <Ionicons
             name="person-add-outline"

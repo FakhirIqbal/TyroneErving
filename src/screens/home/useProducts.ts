@@ -1,85 +1,92 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../config/supabase';
-import { handleRPCPOST } from '../../utils/helper';
-
-const useProducts = () => {
-  const [initialLoading, setinitialLoading] = useState(false);
+import React, { useEffect, useState, useRef } from 'react';
+import { handleRPCPOST, showToast } from '../../utils/helper';
+const useProducts = (filter: string) => {
+  const [initialLoading, setinitialLoading] = useState(true);
   const [hasMorePages, setHasMorePages] = useState(true);
+  const [offset, setoffset] = useState<number>(0);
+  const [error, seterror] = useState<boolean>(false);
   const [allProducts, setallProducts] = useState<any[]>([]);
   const [isLoading, setisLoading] = useState({
     isLoadmore: false,
     isRefresh: false,
   });
+
+  const isRequestInProgress = useRef(false);
+
   useEffect(() => {
-    getAll(true, 0);
-  }, []);
+    refetchProduct();
+  }, [filter]);
 
-  const getAll = async (isRefresh: any, isLoadmore: any) => {
-    setinitialLoading(true);
-
+  const getAll = async (isRefresh: boolean) => {
+    if (isRequestInProgress.current) return;
     if (
-      isLoading.isRefresh ||
-      isLoading.isLoadmore ||
-      (!isRefresh && !isLoadmore)
+      !isRefresh &&
+      (!hasMorePages || isLoading.isLoadmore || isLoading.isRefresh)
     ) {
       return;
     }
+
+    const currentOffset = isRefresh ? 0 : offset;
+
+    isRequestInProgress.current = true;
     setisLoading({
       isRefresh: isRefresh,
       isLoadmore: !isRefresh,
     });
+
     try {
-      const res = await handleRPCPOST('get_all_glasses', {});
-      if (res?.data) {
-        setallProducts(res?.data);
-        console.log('All Products====>', res);
-      }
+      const res = await handleRPCPOST('get_all_glasses', {
+        _limit: 10,
+        _offset: currentOffset,
+        _filter: filter,
+      });
+
       if (res?.error) {
-        console.log('Errorrr imn ', res.error);
+        showToast('error', res?.error);
+        seterror(true);
+        return;
       }
-    } catch (error) {
-      console.log('Catch Eerrrrr', error);
+
+      setHasMorePages(res?.data?.pagination?.has_more);
+
+      if (isRefresh) {
+        setallProducts(res?.data?.glasses || []);
+        setoffset(10);
+      } else {
+        setallProducts(prev => [...prev, ...(res?.data?.glasses || [])]);
+        setoffset(currentOffset + 10);
+      }
+    } catch (error: any) {
+      console.log('Catch Error', error);
+      showToast('error', error?.message);
+      seterror(true);
     } finally {
       setinitialLoading(false);
+      setisLoading({ isLoadmore: false, isRefresh: false });
+      isRequestInProgress.current = false;
     }
   };
 
-  // const trnding = async () => {
-  //   setinitialLoading(true);
-  //   // if (
-  //   //   isLoading.isRefresh ||
-  //   //   isLoading.isLoadmore ||
-  //   //   (!isRefresh && !hasMorePages)
-  //   // ) {
-  //   //   return;
-  //   // }
-  //   // setisLoading({
-  //   //   isRefresh: isRefresh,
-  //   //   isLoadmore: !isRefresh,
-  //   // });
-  //   try {
-  //     const res = await handleRPCPOST('get_trending_glasses', {
-  //       p_limit: 10,
-  //       p_offset: 0,
-  //     });
+  const isLoadmore = () => {
+    if (hasMorePages && !isLoading.isLoadmore && !isLoading.isRefresh) {
+      getAll(false);
+    }
+  };
 
-  //     if (res?.data) {
-  //       setallProducts(res?.data?.data);
-  //       console.log('Res in New Arrival', res?.data?.data);
-  //     }
-  //     if (res?.error) {
-  //       console.log('Errorrr imn ', res.error);
-  //     }
-  //   } catch (error) {
-  //     console.log('Catch Error', error);
-  //   }
-  // };
+  const refetchProduct = () => {
+    if (!isLoading.isRefresh) {
+      getAll(true);
+    }
+  };
 
   return {
-    getAll,
     allProducts,
     initialLoading,
+    isLoadmore,
+    refetchProduct,
+    isLoading,
+    hasMorePages,
+    error,
   };
 };
 

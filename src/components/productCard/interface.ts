@@ -13,4 +13,5 @@ export type ProductCardProps = {
   favOnpress?: () => void;
   crtOnpress?: () => void;
   isLoading?: boolean;
+  navigation?: any;
 };

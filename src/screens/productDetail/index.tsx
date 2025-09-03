@@ -26,7 +26,7 @@ import { CameraPan } from '../../components/3dComp';
 import { FilamentScene, Model } from 'react-native-filament';
 import Customimage from '../../components/common/customImage';
 
-const ProductDetail = ({ navigation }: any) => {
+const ProductDetail = ({ navigation, route }: any) => {
   const colors = ['#FF5722', '#FF9800', '#2196F3', '#212121'];
   const images = [
     require('../../assets/men.png'),
@@ -34,7 +34,8 @@ const ProductDetail = ({ navigation }: any) => {
     require('../../assets/men.png'),
     require('../../assets/men.png'),
   ];
-
+  const { data } = route?.params || {};
+  console.log('Route Data', data);
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [quantity, setQuantity] = useState(1);
 
@@ -61,7 +62,7 @@ const ProductDetail = ({ navigation }: any) => {
 
         <View style={{}}>
           <Customimage
-            source={require('../../assets/gls2.png')}
+            source={{ uri: data?.colors[0]?.images[0] }}
             style={{
               width: wp(50),
               height: wp(50),
@@ -82,10 +83,10 @@ const ProductDetail = ({ navigation }: any) => {
         </View>
         <View style={styles.infoContainer}>
           <View>
-            <Text style={styles.name}>OH-13</Text>
-            <RatingStars value={3} />
+            <Text style={styles.name}>{data?.name}</Text>
+            <RatingStars value={data?.avg_rating} />
           </View>
-          <Text style={styles.price}>$2,495.00</Text>
+          <Text style={styles.price}>{'$' + data?.base_price}</Text>
         </View>
 
         <Text style={styles.subHeading}>select size:</Text>
@@ -125,18 +126,10 @@ const ProductDetail = ({ navigation }: any) => {
         </View>
 
         <Text style={styles.subHeading}>Description:</Text>
-        <Text style={styles.text}>
-          The lenses of polarized sunglasses reduce glare reflected at some
-          angles off shiny non-metallic surfaces such as water. They allow
-          wearers to see into water.
-        </Text>
+        <Text style={styles.text}>{data?.description}</Text>
 
         <Text style={styles.subHeading}>Add prescription:</Text>
-        <Text style={styles.text}>
-          The lenses of polarized sunglasses reduce glare reflected at some
-          angles off shiny non-metallic surfaces such as water. They allow
-          wearers to see into water.
-        </Text>
+        <Text style={styles.text}>{data?.prescription}</Text>
 
         <View
           style={{ marginBottom: hp(2), flex: 1, justifyContent: 'flex-end' }}

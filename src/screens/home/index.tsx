@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -28,110 +29,70 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/features/addCart';
 import { RootState } from '../../redux/store';
 import { addToWhishList } from '../../redux/features/whishList';
-
-const products = [
-  {
-    id: '1',
-    name: 'OH-12',
-    price: 2495,
-    image: require('../../assets/cardImage/shades.png'),
-    fav: false,
-  },
-  {
-    id: '2',
-    name: 'OH-12',
-    price: 2495,
-    image: require('../../assets/cardImage/shades.png'),
-    fav: false,
-  },
-  {
-    id: '3',
-    name: 'OH-12',
-    price: 2495,
-    image: require('../../assets/cardImage/shades.png'),
-    fav: false,
-  },
-  {
-    id: '4',
-    name: 'OH-12',
-    price: 2495,
-    image: require('../../assets/cardImage/shades.png'),
-    fav: false,
-  },
-  {
-    id: '5',
-    name: 'OH-12',
-    price: 2495,
-    image: require('../../assets/cardImage/shades.png'),
-    fav: false,
-  },
-  {
-    id: '6',
-    name: 'OH-12',
-    price: 2495,
-    image: require('../../assets/cardImage/shades.png'),
-    fav: false,
-  },
-];
+import { TextNormal } from '../../components/common/customText';
+import { Font } from '../../utils/ImagePath';
 
 const Home = ({ navigation }: any) => {
-  const crtData = useSelector((state: RootState) => state);
-  console.log('Cart Data', crtData);
   const TABBARHEIGHT = useBottomTabBarHeight();
   const dispatch = useDispatch();
-  const categories = ['All', 'New Arrivals', 'Top Pick', 'Men', 'Women'];
+  // const categories = ['All', 'New Arrivals', 'Top Pick', 'Men', 'Women'];
+  const categories = ['All', 'New Arrivals', 'male', 'female'];
   const [selected, setSelected] = useState('All');
   const [query, setQuery] = useState('');
-  const { allProducts, initialLoading } = useProducts();
-
+  const {
+    allProducts,
+    initialLoading,
+    isLoadmore,
+    refetchProduct,
+    isLoading,
+    hasMorePages,
+    error,
+  } = useProducts(selected);
   console.log('Trn', allProducts);
-
-  const addCart = (item: any) => {
-    let quantity = 1;
-    const cartItem = {
-      ...item,
-      quantity,
-    };
-
-    return dispatch(addToCart(cartItem));
-  };
-  const renderItem = useCallback(
-    ({ item }: any) => {
-      if (item?.colors === null) {
-        return;
-      }
-      return (
-        <ProductCard
-          isLoading={!item}
-          item={item}
-          favOnpress={() => {
-            if (item) {
-              dispatch(addToWhishList(item));
-            }
-          }}
-          crtOnpress={() => {
-            if (item) {
-              addCart(item);
-            }
-          }}
-        />
-      );
+  const addCart = useCallback(
+    (item: any) => {
+      if (!item) return;
+      dispatch(addToCart({ ...item, quantity: 1 }));
     },
+    [dispatch],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: any) => (
+      <ProductCard
+        isLoading={!item}
+        item={item}
+        favOnpress={() => item && dispatch(addToWhishList(item))}
+        crtOnpress={() => item && addCart(item)}
+        navigation={navigation}
+      />
+    ),
     [dispatch, addCart],
   );
-  const allData = useMemo(
-    () => (initialLoading ? Array(6).fill(undefined) : allProducts || []),
-    [initialLoading, allProducts],
-  );
-  return (
-    <WrapperContainer>
-      <ScrollView
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={false} onRefresh={() => {}} />
-        }
+
+  const renderCategoryItem = useCallback(
+    ({ item: cat, index }: { item: string; index: number }) => (
+      <TouchableOpacity
+        key={index}
+        style={[styles.category, selected === cat && styles.categorySelected]}
+        onPress={() => setSelected(cat)}
       >
+        <Text
+          style={[
+            styles.categoryText,
+            selected === cat && styles.categoryTextSelected,
+          ]}
+        >
+          {cat}
+        </Text>
+      </TouchableOpacity>
+    ),
+    [selected],
+  );
+
+  const headerComp = useMemo(
+    () => (
+      <>
         <HomeHeader navigation={navigation} />
         <View style={styles.searchContainer}>
           <Feather
@@ -154,57 +115,81 @@ const Home = ({ navigation }: any) => {
             style={{ marginRight: 10 }}
           />
         </View>
-
-        <ScrollView
+        <FlatList
           horizontal
+          data={categories}
+          renderItem={renderCategoryItem}
+          keyExtractor={item => item}
           showsHorizontalScrollIndicator={false}
           style={styles.categoryScroll}
-        >
-          {categories.map((cat, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.category,
-                selected === cat && styles.categorySelected,
-              ]}
-              onPress={() => setSelected(cat)}
-            >
-              <Text
-                style={[
-                  styles.categoryText,
-                  selected === cat && styles.categoryTextSelected,
-                ]}
-              >
-                {cat}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        />
         <HomeBanner />
-        {/* <RateAppModal /> */}
+      </>
+    ),
+    [navigation, categories, renderCategoryItem],
+  );
 
-        <View style={styles.productContainer}>
-          <FlatList
-            scrollEnabled={false}
-            columnWrapperStyle={{
-              justifyContent: 'space-between',
-              padding: wp(1),
-              marginBottom: hp(1),
-            }}
-            numColumns={2}
-            // data={[...Array(6)]}
-            data={allData}
-            renderItem={renderItem}
+  const allData = useMemo(
+    () => (initialLoading ? Array(6).fill(undefined) : allProducts || []),
+    [initialLoading, allProducts],
+  );
+
+  return (
+    <WrapperContainer>
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading.isRefresh}
+            onRefresh={refetchProduct}
+            tintColor={'#c4c4c4'}
           />
-        </View>
-
-        <View
-          style={[
-            styles.productContainer,
-            { paddingBottom: TABBARHEIGHT + hp(5) },
-          ]}
-        ></View>
-      </ScrollView>
+        }
+        onEndReached={isLoadmore}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={headerComp}
+        columnWrapperStyle={{
+          justifyContent: 'space-between',
+          padding: wp(1),
+          marginBottom: hp(1),
+        }}
+        contentContainerStyle={{ paddingBottom: TABBARHEIGHT + hp(5) }}
+        numColumns={2}
+        data={allData}
+        renderItem={renderItem}
+        // keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+        windowSize={5}
+        maxToRenderPerBatch={8}
+        initialNumToRender={6}
+        ListFooterComponent={
+          isLoading.isLoadmore ? (
+            <ActivityIndicator color={'#000'} size={hp(3)} />
+          ) : !isLoading.isLoadmore &&
+            !isLoading.isRefresh &&
+            !hasMorePages &&
+            allProducts.length ? (
+            <TextNormal
+              style={{
+                color: '#000',
+                textAlign: 'center',
+                fontFamily: Font.medium,
+              }}
+            >
+              You have reached the end !
+            </TextNormal>
+          ) : error && !isLoading.isLoadmore && !isLoading.isRefresh ? (
+            <TextNormal style={{ color: 'red', alignSelf: 'center' }}>
+              {'Error fetching data'}
+            </TextNormal>
+          ) : null
+        }
+        ListEmptyComponent={
+          <TextNormal
+            style={{ color: '#000', alignSelf: 'center', marginTop: hp(15) }}
+          >
+            No product found
+          </TextNormal>
+        }
+      />
     </WrapperContainer>
   );
 };
@@ -212,12 +197,6 @@ const Home = ({ navigation }: any) => {
 export default Home;
 
 const styles = StyleSheet.create({
-  productContainer: {
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    // justifyContent: 'space-around',
-    marginBottom: wp(5),
-  },
   searchContainer: {
     backgroundColor: COLORS.gray,
     borderRadius: wp(2),
@@ -240,7 +219,7 @@ const styles = StyleSheet.create({
     paddingVertical: hp(1),
     backgroundColor: '#F2F2F2',
     borderRadius: wp(2),
-    marginRight: wp(2),
+    marginHorizontal: wp(2),
   },
   categorySelected: {
     backgroundColor: COLORS.orange,

@@ -163,9 +163,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   favOnpress,
   crtOnpress,
   isLoading = false,
+  navigation,
 }) => {
-  const navigation = useNavigation();
-
   if (isLoading) {
     return (
       <View style={styles.container}>
@@ -188,7 +187,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         resizeMode="cover"
       >
         <Pressable
-          onPress={() => navigation.navigate('ProductDetail' as never)}
+          onPress={() => navigation.navigate('ProductDetail', { data: item })}
           style={styles.pressableContainer}
         >
           <Customimage

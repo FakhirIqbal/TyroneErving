@@ -1,31 +1,120 @@
-import React, { useRef } from 'react';
-import { COLORS } from '../../../utils/theme';
-import { CustomPhoneInputProp } from './interface'
+import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 import PhoneInput from 'react-native-phone-number-input';
+import { COLORS } from '../../../utils/theme';
+import { CustomPhoneInputProp } from './interface';
 
-
-const CustomPhoneInput: React.FC<CustomPhoneInputProp> = ({ label, value, onChange, error }) => {
-
+const CustomPhoneInput: React.FC<CustomPhoneInputProp> = ({
+  label,
+  value,
+  onChange,
+  error,
+  disabled,
+}) => {
   const phoneInput = useRef<PhoneInput>(null);
+  const [defaultCode, setDefaultCode] = useState<string>(
+    value?.country_code ? value.country_code : 'US',
+  );
+  const [isTouched, setIsTouched] = useState(false);
+
+  useEffect(() => {
+    if (value?.country_code) {
+      setDefaultCode(value.country_code);
+    }
+  }, [value?.country_code]);
+
+  const validatePhoneNumber = (text: string, country: any = null) => {
+    if (!phoneInput.current) return { isValid: false, countryCode: '' };
+
+    try {
+      let countryCode = '';
+
+      if (country) {
+        countryCode = country.cca2;
+      } else {
+        countryCode = phoneInput.current.getCountryCode() || '';
+      }
+
+      const isValidNumber = phoneInput.current.isValidNumber(text);
+
+      return {
+        isValid: isValidNumber,
+        countryCode: countryCode,
+      };
+    } catch (error) {
+      return {
+        isValid: false,
+        countryCode: phoneInput.current.getCountryCode() || '',
+      };
+    }
+  };
+
+  const handleTextChange = (text: string) => {
+    setIsTouched(true);
+
+    if (!phoneInput.current) return;
+
+    const validation = validatePhoneNumber(text);
+    const countryCode = validation.countryCode;
+
+    const getCallingCode = phoneInput.current.getCallingCode();
+
+    let nationalNumber = text;
+    if (text.startsWith(`+${getCallingCode}`)) {
+      nationalNumber = text.replace(`+${getCallingCode}`, '');
+    }
+
+    onChange({
+      country_code: countryCode,
+      national_number: nationalNumber,
+      formatted_number: text,
+      is_valid: validation.isValid,
+    });
+  };
+
+  const handleCountryChange = (country: any) => {
+    setIsTouched(true);
+
+    if (!phoneInput.current) return;
+
+    const currentNumber = phoneInput.current.state.number || '';
+
+    const newCountryCode = country.callingCode[0];
+    const formattedNumber = `+${newCountryCode}${currentNumber}`;
+
+    const validation = validatePhoneNumber(formattedNumber, country);
+
+    onChange({
+      country_code: country.cca2,
+      national_number: currentNumber,
+      formatted_number: formattedNumber,
+      is_valid: validation.isValid,
+    });
+  };
+
+  const shouldShowError = error && isTouched;
 
   return (
     <View style={styles.container}>
-
       {label && <Text style={styles.label}>{label}</Text>}
 
       <PhoneInput
+        disabled={disabled}
         ref={phoneInput}
-        defaultValue={value}
-        defaultCode="US"
+        defaultValue={value?.national_number || ''}
+        defaultCode={defaultCode as any}
         layout="first"
-        onChangeFormattedText={onChange}
+        onChangeFormattedText={handleTextChange}
+        onChangeCountry={handleCountryChange}
         containerStyle={[
           styles.phoneContainer,
-          error && styles.errorBorder,
+          shouldShowError && styles.errorBorder,
         ]}
         textContainerStyle={styles.textInput}
         textInputStyle={styles.inputText}
@@ -33,7 +122,7 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProp> = ({ label, value, onChan
         flagButtonStyle={styles.flagButton}
       />
 
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {shouldShowError && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };

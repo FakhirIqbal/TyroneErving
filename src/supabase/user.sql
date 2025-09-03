@@ -5,6 +5,8 @@ CREATE OR REPLACE FUNCTION public.sign_up(
     password TEXT,
     full_name TEXT DEFAULT NULL,
     phone_number TEXT DEFAULT NULL,
+    country_code TEXT,
+    raw_number TEXT,
     gender TEXT DEFAULT NULL
   ) RETURNS JSONB LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE result JSONB;
@@ -24,6 +26,8 @@ INSERT INTO public.users (
     password,
     name,
     phonenumber,
+    raw_number,
+    country_code,
     gender,
     created_at
   )
@@ -33,6 +37,8 @@ VALUES (
     crypt(password, gen_salt('bf')),
     full_name,
     phone_number,
+    raw_number,
+    country_code,
     gender,
     NOW()
   )
@@ -147,3 +153,37 @@ RETURN jsonb_build_object(
 );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+-- Edit Profile --
+CREATE OR REPLACE FUNCTION public.edit_profile(
+    user_id UUID,
+    user_name TEXT,
+    country_cod TEXT,
+    national_numbr TEXT,
+    formatted_numbr TEXT,
+    profile_image TEXT
+  ) RETURNS JSONB AS $$
+DECLARE user_profile RECORD;
+BEGIN
+UPDATE users
+SET name = COALESCE(user_name, name),
+  country_code = COALESCE(country_cod, country_code),
+  national_number = COALESCE(national_numbr, national_number),
+  formatted_number = COALESCE(formatted_numbr, formatted_number),
+  profileImage = COALESCE(profile_image, profileImage)
+WHERE id = user_id;
+SELECT * INTO user_profile
+FROM users
+WHERE id = user_id;
+RETURN to_jsonb(user_profile);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+-- user_info --
+CREATE OR REPLACE FUNCTION get_user_info(user_id UUID) RETURNS JSONB LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE user_data RECORD;
+BEGIN
+SELECT * INTO user_data
+FROM users
+WHERE id = user_id;
+RETURN to_jsonb(user_data);
+END;
+$$;
