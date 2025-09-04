@@ -47,7 +47,7 @@ const Home = ({ navigation }: any) => {
     isLoading,
     hasMorePages,
     error,
-    handleSearch,
+    setSearch,
     search,
   } = useProducts(selected);
   // console.log('Trn', allProducts);
@@ -107,7 +107,7 @@ const Home = ({ navigation }: any) => {
             placeholder="Search for *Sunglasses*"
             style={styles.input}
             value={search}
-            onChangeText={handleSearch}
+            onChangeText={setSearch}
             placeholderTextColor={COLORS.darkGray}
           />
           <Feather
@@ -158,7 +158,7 @@ const Home = ({ navigation }: any) => {
         numColumns={2}
         data={allData}
         renderItem={renderItem}
-        // keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+        keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
         windowSize={5}
         maxToRenderPerBatch={8}
         initialNumToRender={6}

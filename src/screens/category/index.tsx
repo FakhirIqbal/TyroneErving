@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   View,
@@ -8,6 +8,8 @@ import {
   Text,
   ImageSourcePropType,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import {
@@ -23,12 +25,23 @@ import ProductCard from '../../components/productCard';
 import Header from '../../components/common/Header';
 import WrapperContainer from '../../components/common/customWrapper';
 import Customimage from '../../components/common/customImage';
+import { TextNormal, TextSmall } from '../../components/common/customText';
+import { addToWishlist } from '../../redux/features/whishList';
+import { addToCart } from '../../redux/features/addCart';
+import { useDispatch } from 'react-redux';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import useCate from './useCate';
+import { Font } from '../../utils/ImagePath';
+import { HorizontalSelection } from '../../components/horizontalSelect';
 
 const frameTypes = [
   { name: 'Rimless', image: require('../../assets/cardImage/shades.png') },
   { name: 'Full Rimmed', image: require('../../assets/cardImage/shades.png') },
   { name: 'Semi Rimless', image: require('../../assets/cardImage/shades.png') },
-  { name: 'Double Rimless', image: require('../../assets/cardImage/shades.png') },
+  {
+    name: 'Double Rimless',
+    image: require('../../assets/cardImage/shades.png'),
+  },
 ];
 
 const frameMaterials = [
@@ -45,56 +58,84 @@ const lensTypes = [
   'Progressive lenses',
 ];
 
-
-
-type CardItem = {
-  name: string;
-  image: ImageSourcePropType;
-};
-type HorizontalCardListProps = {
-  data: CardItem[];
-  selected: string | any;
-  onSelect: (name: string) => void;
-};
-
 const Category = ({ navigation }: any) => {
-  const [price, setPrice] = useState(3);
-  const [selectedFrameTypes, setSelectedFrameTypes] = useState<string | null>(null);
-  const [selectedFrameMaterials, setSelectedFrameMaterials] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const TABBARHEIGHT = useBottomTabBarHeight();
+  const [price, setPrice] = useState(50);
+  const [selectedFrameTypes, setSelectedFrameTypes] = useState<string | null>(
+    null,
+  );
+  const [selectedFrameMaterials, setSelectedFrameMaterials] = useState<
+    string | null
+  >(null);
   const [selectedLensType, setSelectedLensType] = useState<string | null>(null);
+  console.log('s', selectedFrameMaterials);
+  const {
+    allProducts,
+    error,
+    hasMorePages,
+    initialLoading,
+    isLoading,
+    isLoadmore,
+    refetchProduct,
+  } = useCate(
+    price,
+    selectedFrameTypes,
+    selectedFrameMaterials,
+    selectedLensType,
+  );
 
-  // console.log(selectedFrameTypes);
-  // console.log(selectedFrameMaterials);
-  // console.log(selectedLensType);
+  const addCart = useCallback(
+    (item: any) => {
+      if (!item) return;
+      dispatch(addToCart({ ...item, quantity: 1 }));
+    },
+    [dispatch],
+  );
+  const headerComp = useMemo(
+    () => (
+      <>
+        <Header title="Category" navigation={navigation} />
 
-
-
-  return (
-    <SafeAreaView edges={['top']} style={styles.container}>
-      <ScrollView
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={false} onRefresh={() => { }} />
-        }
-      >
-        <CustomHeader title="Category" onBack={() => navigation.goBack()} />
-
-        <CustomHeading text="Frame Type" reverse style={styles.sectionHeading} />
-        <HorizontalCardList
+        <CustomHeading
+          text="Frame Type"
+          reverse
+          style={styles.sectionHeading}
+        />
+        <FlatList
           data={frameTypes}
-          selected={selectedFrameTypes}
-          onSelect={(name) => setSelectedFrameTypes(name)}
+          horizontal={true} // If you want horizontal scrolling
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item.name}
+          renderItem={({ item, index }) => (
+            <HorizontalSelection
+              onPress={() => setSelectedFrameTypes(item.name)}
+              item={item}
+              index={index}
+              selected={selectedFrameTypes}
+            />
+          )}
         />
 
         <CustomHeading text="Frame Materials" style={styles.sectionHeading} />
-        <HorizontalCardList
+
+        <FlatList
           data={frameMaterials}
-          selected={selectedFrameMaterials}
-          onSelect={(name) => setSelectedFrameMaterials(name)}
+          horizontal={true} // If you want horizontal scrolling
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item.name}
+          renderItem={({ item, index }) => (
+            <HorizontalSelection
+              onPress={() => setSelectedFrameMaterials(item.name)}
+              item={item}
+              index={index}
+              selected={selectedFrameMaterials}
+            />
+          )}
         />
 
         <CustomHeading text="Lens Type" reverse style={styles.sectionHeading} />
+
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {lensTypes.map((item, index) => {
             const isSelected = selectedLensType === item;
@@ -117,77 +158,111 @@ const Category = ({ navigation }: any) => {
           })}
         </ScrollView>
 
-
-        <CustomHeading text="Price Range" style={styles.sectionHeading} />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+            marginBottom: hp(2),
+          }}
+        >
+          <CustomHeading text="Price Range" style={styles.sectionHeading} />
+          <TextNormal>{price + '$'}</TextNormal>
+        </View>
         <Slider
           style={styles.slider}
-          minimumValue={1}
-          maximumValue={50}
-          minimumTrackTintColor={COLORS.orange}
-          maximumTrackTintColor={COLORS.gray}
-          thumbTintColor={COLORS.orange}
+          minimumValue={50}
+          maximumValue={1000}
+          step={10}
+          minimumTrackTintColor="#FB5823"
+          maximumTrackTintColor="#D3D3D3"
+          thumbTintColor="#FB5823"
           value={price}
           onValueChange={setPrice}
         />
 
-        {/* <View style={styles.productContainer}>
-          {products.map((item, index) => (
-            <ProductCard key={item.id} item={item} />
-          ))}
-        </View> */}
-      </ScrollView>
-    </SafeAreaView>
+        <View style={styles.limitLabels}>
+          <TextSmall style={styles.limitText}>50$</TextSmall>
+          <TextSmall style={styles.limitText}>1000$ </TextSmall>
+        </View>
+      </>
+    ),
+    [frameMaterials, selectedFrameMaterials, selectedFrameTypes],
+  );
+  const renderItem = useCallback(
+    ({ item }: any) => (
+      <ProductCard
+        isLoading={!item}
+        item={item}
+        favOnpress={() => item && dispatch(addToWishlist(item))}
+        crtOnpress={() => item && addCart(item)}
+        navigation={navigation}
+      />
+    ),
+    [dispatch, addCart],
+  );
+
+  return (
+    <WrapperContainer>
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading.isRefresh}
+            onRefresh={refetchProduct}
+            tintColor={'#c4c4c4'}
+          />
+        }
+        onEndReached={isLoadmore}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={headerComp}
+        columnWrapperStyle={{
+          justifyContent: 'space-between',
+          padding: wp(1),
+          marginBottom: hp(1),
+        }}
+        contentContainerStyle={{ paddingBottom: TABBARHEIGHT + hp(8) }}
+        numColumns={2}
+        data={allProducts}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+        windowSize={5}
+        maxToRenderPerBatch={8}
+        initialNumToRender={6}
+        ListFooterComponent={
+          isLoading.isLoadmore ? (
+            <ActivityIndicator color={'#000'} size={hp(3)} />
+          ) : !isLoading.isLoadmore &&
+            !isLoading.isRefresh &&
+            !hasMorePages &&
+            allProducts.length ? (
+            <TextNormal
+              style={{
+                color: '#000',
+                textAlign: 'center',
+                fontFamily: Font.medium,
+              }}
+            >
+              You have reached the end !
+            </TextNormal>
+          ) : error && !isLoading.isLoadmore && !isLoading.isRefresh ? (
+            <TextNormal style={{ color: 'red', alignSelf: 'center' }}>
+              {'Error fetching data'}
+            </TextNormal>
+          ) : null
+        }
+        ListEmptyComponent={
+          <TextNormal
+            style={{ color: '#000', alignSelf: 'center', marginTop: hp(5) }}
+          >
+            No product found
+          </TextNormal>
+        }
+      />
+    </WrapperContainer>
   );
 };
 
 export default Category;
-
-const HorizontalCardList = ({ data, selected, onSelect }: HorizontalCardListProps) => (
-  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-    {data.map((item, index) => {
-      const isSelected = Array.isArray(selected)
-        ? selected.includes(item.name)
-        : selected === item.name;
-
-      return (
-        <TouchableOpacity
-          key={index.toString()}
-          onPress={() => onSelect(item.name)}
-          style={[
-            styles.card,
-            // isSelected && {
-            //   borderColor: COLORS.orange,
-            //   borderWidth: 2,
-            //   borderRadius: wp(2),
-            // },
-          ]}
-        >
-          <Customimage
-            source={item.image}
-            style={styles.image}
-            resizeMode="contain"
-            btnStyle={[
-              isSelected && {
-                borderColor: COLORS.darkGray,
-                borderWidth: 2,
-                borderRadius: wp(2),
-              },
-            ]}
-          />
-          <Text
-            style={[
-              styles.name,
-              isSelected && { color: COLORS.orange, fontWeight: '600' },
-            ]}
-          >
-            {item.name}
-          </Text>
-        </TouchableOpacity>
-      );
-    })}
-  </ScrollView>
-);
-
 
 const styles = StyleSheet.create({
   container: {
@@ -230,9 +305,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: hp(14),
   },
+  limitLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 4,
+  },
+  limitText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  selectedCard: {
+    borderColor: COLORS.orange,
+    borderWidth: 2,
+    borderRadius: wp(2),
+  },
 });
-
-
 
 // const products = Array.from({ length: 6 }).map((_, index) => ({
 //   id: (index + 1).toString(),

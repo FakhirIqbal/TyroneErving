@@ -3,14 +3,15 @@ CREATE OR REPLACE FUNCTION public.sign_up(
     user_id UUID,
     email TEXT,
     password TEXT,
-    full_name TEXT DEFAULT NULL,
-    phone_number TEXT DEFAULT NULL,
+    full_name TEXT,
+    formatted_number TEXT,
     country_code TEXT,
-    raw_number TEXT,
-    gender TEXT DEFAULT NULL
+    national_number TEXT,
+    gender TEXT
   ) RETURNS JSONB LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE result JSONB;
-BEGIN IF user_id IS NULL
+BEGIN -- Validate required fields
+IF user_id IS NULL
 OR email IS NULL
 OR password IS NULL THEN RETURN jsonb_build_object(
   'success',
@@ -19,15 +20,15 @@ OR password IS NULL THEN RETURN jsonb_build_object(
   'Missing required fields'
 );
 END IF;
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+-- Insert user and return inserted row as JSONB
 INSERT INTO public.users (
     id,
     email,
     password,
     name,
-    phonenumber,
-    raw_number,
+    formatted_number,
     country_code,
+    national_number,
     gender,
     created_at
   )
@@ -36,14 +37,20 @@ VALUES (
     email,
     crypt(password, gen_salt('bf')),
     full_name,
-    phone_number,
-    raw_number,
+    formatted_number,
     country_code,
+    national_number,
     gender,
     NOW()
   )
-RETURNING to_jsonb(public.users.*) INTO result;
-RETURN jsonb_build_object('success', true, 'data', result);
+RETURNING to_jsonb(users.*) INTO result;
+RETURN jsonb_build_object(
+  'success',
+  true,
+  'data',
+  result
+);
+-- Error handling
 EXCEPTION
 WHEN unique_violation THEN RETURN jsonb_build_object('success', false, 'error', 'User already exists');
 WHEN others THEN RETURN jsonb_build_object('success', false, 'error', SQLERRM);
