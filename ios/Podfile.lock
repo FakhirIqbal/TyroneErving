@@ -2121,7 +2121,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context (5.5.2):
+  - react-native-safe-area-context (5.6.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2140,8 +2140,8 @@ PODS:
     - React-hermes
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.5.2)
-    - react-native-safe-area-context/fabric (= 5.5.2)
+    - react-native-safe-area-context/common (= 5.6.1)
+    - react-native-safe-area-context/fabric (= 5.6.1)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -2152,7 +2152,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/common (5.5.2):
+  - react-native-safe-area-context/common (5.6.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2181,7 +2181,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/fabric (5.5.2):
+  - react-native-safe-area-context/fabric (5.6.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2211,7 +2211,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-skia (2.1.1):
+  - react-native-skia (2.2.9):
     - boost
     - DoubleConversion
     - fast_float
@@ -2301,7 +2301,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-worklets-core (1.6.0):
+  - react-native-worklets-core (1.6.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -2837,7 +2837,7 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNGestureHandler (2.27.1):
+  - RNGestureHandler (2.28.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2929,7 +2929,7 @@ PODS:
     - SocketRocket
     - TOCropViewController (~> 2.7.4)
     - Yoga
-  - RNReanimated (3.18.0):
+  - RNReanimated (3.19.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2956,11 +2956,11 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.18.0)
-    - RNReanimated/worklets (= 3.18.0)
+    - RNReanimated/reanimated (= 3.19.1)
+    - RNReanimated/worklets (= 3.19.1)
     - SocketRocket
     - Yoga
-  - RNReanimated/reanimated (3.18.0):
+  - RNReanimated/reanimated (3.19.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2987,69 +2987,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.18.0)
+    - RNReanimated/reanimated/apple (= 3.19.1)
     - SocketRocket
     - Yoga
-  - RNReanimated/reanimated/apple (3.18.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - SocketRocket
-    - Yoga
-  - RNReanimated/worklets (3.18.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - RNReanimated/worklets/apple (= 3.18.0)
-    - SocketRocket
-    - Yoga
-  - RNReanimated/worklets/apple (3.18.0):
+  - RNReanimated/reanimated/apple (3.19.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -3078,7 +3019,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNScreens (4.12.0):
+  - RNReanimated/worklets (3.19.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -3099,17 +3040,45 @@ PODS:
     - React-jsi
     - React-NativeModulesApple
     - React-RCTFabric
-    - React-RCTImage
     - React-renderercss
     - React-rendererdebug
     - React-utils
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.12.0)
+    - RNReanimated/worklets/apple (= 3.19.1)
     - SocketRocket
     - Yoga
-  - RNScreens/common (4.12.0):
+  - RNReanimated/worklets/apple (3.19.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
+  - RNScreens (4.15.4):
     - boost
     - DoubleConversion
     - fast_float
@@ -3137,9 +3106,40 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
+    - RNScreens/common (= 4.15.4)
     - SocketRocket
     - Yoga
-  - RNSVG (15.12.0):
+  - RNScreens/common (4.15.4):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-RCTImage
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
+  - RNSVG (15.12.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -3166,10 +3166,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.12.0)
+    - RNSVG/common (= 15.12.1)
     - SocketRocket
     - Yoga
-  - RNSVG/common (15.12.0):
+  - RNSVG/common (15.12.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -3198,7 +3198,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNVectorIcons (10.2.0):
+  - RNVectorIcons (10.3.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -3334,19 +3334,19 @@ PODS:
   - StripeUICore (24.20.0):
     - StripeCore (= 24.20.0)
   - TOCropViewController (2.7.4)
-  - VisionCamera (4.7.0):
-    - VisionCamera/Core (= 4.7.0)
-    - VisionCamera/FrameProcessors (= 4.7.0)
-    - VisionCamera/React (= 4.7.0)
-  - VisionCamera/Core (4.7.0)
-  - VisionCamera/FrameProcessors (4.7.0):
+  - VisionCamera (4.7.2):
+    - VisionCamera/Core (= 4.7.2)
+    - VisionCamera/FrameProcessors (= 4.7.2)
+    - VisionCamera/React (= 4.7.2)
+  - VisionCamera/Core (4.7.2)
+  - VisionCamera/FrameProcessors (4.7.2):
     - React
     - React-callinvoker
     - react-native-worklets-core
-  - VisionCamera/React (4.7.0):
+  - VisionCamera/React (4.7.2):
     - React-Core
     - VisionCamera/FrameProcessors
-  - VisionCameraFaceDetector (1.8.6):
+  - VisionCameraFaceDetector (1.8.8):
     - GoogleMLKit/FaceDetection (= 7.0.0)
     - React-Core
     - VisionCamera
@@ -3716,10 +3716,10 @@ SPEC CHECKSUMS:
   react-native-compressor: bd4edc86b8db6f0f0dbfe5f8e7d3dd296b81d56c
   react-native-filament: 1703280b5a480b0660099b2efa0797154a097d66
   react-native-mmkv: 7fb4729ad5cb787a4394e6c4bd48e4b8ec30f25c
-  react-native-safe-area-context: 68d1363b8354472a961aa6861ba8451beaf9a810
-  react-native-skia: a41aa775aca8cd5695f88a6e486ca06754542e17
+  react-native-safe-area-context: 8ed800930eb7d0b6651218f69656e823d37b6ef7
+  react-native-skia: 35047163205af8a61b59c44df37c54b26e791f97
   react-native-slider: c434f7094c9500dfa1176931f48e5957872818f8
-  react-native-worklets-core: c1a83f37841a337b55a7fcdc9729f3054abcf5f9
+  react-native-worklets-core: 985aba233b66be8abdf02a264649858f0f460ea1
   React-NativeModulesApple: e16d5c133019987285f001fbf1461a861e40426f
   React-oscompat: 7c0a341cc31e350da71ddf2e46de0a845d1d1626
   React-perflogger: c91e01612298b74f70d846ae3666d2b078c547e0
@@ -3753,12 +3753,12 @@ SPEC CHECKSUMS:
   ReactCommon: b028d09a66e60ebd83ca59d8cc9a1216360db147
   RNCMaskedView: 7e0ce15656772a939ff0d269100bca3a182163c8
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
-  RNGestureHandler: 5e1a1605659c22098719fc2e8aee453fe728f52e
+  RNGestureHandler: db29d3e7edf41a11d133cc3ffd4029762376ed1a
   RNImageCropPicker: c62ac5036fb9813c15221611043de4405101eee9
-  RNReanimated: bc1ddb7a5352648bcf0d592256069833bf935a46
-  RNScreens: ab490a252dd536fca261c72ab7e5538e656dcb2b
-  RNSVG: 341f555dbcd83a34d1f058e88df387de7bbc3347
-  RNVectorIcons: ef9b4b0b786053ebdd63ee2972f48de9633ba166
+  RNReanimated: 4c869be3fca0533e45c5ba1d5cc5079c322e95d4
+  RNScreens: 26bb60cdb2ef2ca06fd87feefc495072f25982a7
+  RNSVG: d407e5f2ede12bbcd92e4d23a405ad5a5f7294a3
+  RNVectorIcons: be4d047a76ad307ffe54732208fb0498fcb8477f
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
@@ -3772,8 +3772,8 @@ SPEC CHECKSUMS:
   StripePaymentsUI: d6b0285fdda8ac9cf8e83de423ca4efbf8b29439
   StripeUICore: 31c439e9a03cd178415fa9dd65cc1ce71db260ec
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
-  VisionCamera: 1470a7fa013e22de7481640a4d9c597ad6f13919
-  VisionCameraFaceDetector: 6f122c65cd846694edd08dfff98e22b0e03f7604
+  VisionCamera: 4146fa2612c154f893a42a9b1feedf868faa6b23
+  VisionCameraFaceDetector: fadaf2da80a26a52b3241eee9c9a0469f98486cd
   Yoga: 0c4b7d2aacc910a1f702694fa86be830386f4ceb
 
 PODFILE CHECKSUM: 36b305f47432b53d7b8878aa88f6febbdc9fbd39
