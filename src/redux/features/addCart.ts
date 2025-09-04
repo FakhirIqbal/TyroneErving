@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product } from './types';
 import { Alert } from 'react-native';
+import { showToast } from '../../utils/helper';
 
 export const addCart = createSlice({
   name: 'addCart',
@@ -16,38 +17,31 @@ export const addCart = createSlice({
       );
 
       if (existingItem) {
-        return Alert.alert('', 'Item already exists in the cart');
+        showToast('info', 'Item Already In Cart');
+      } else {
+        state.cartItems.push(item);
+        showToast('success', 'Item Added To Cart');
       }
-      state.cartItems.push(item);
     },
     removeFromCart: (state, action) => {
       const id = action.payload;
       state.cartItems = state.cartItems.filter(item => item.id !== id);
+      showToast('success', 'Item Removed From Cart');
     },
-
-    increaseQuantity: (state, action) => {
-      const { id } = action.payload;
-      const item = state.cartItems.find(item => item.id === id);
-
-      if (item) {
-        item.quantity += 1;
-      }
-    },
-    decreaseQuantity: (state, action) => {
-      const { id } = action.payload;
-      const item = state.cartItems.find(item => item.id === id);
-
-      if (item && item.quantity > 1) {
-        item.quantity -= 1;
-      }
-    },
+    updateCartQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
+            const item = state.cartItems.find(p => p.id === action.payload.id);
+            if (item) {
+                item.quantity = action.payload.quantity;
+            }
+        },
     clearCart: state => {
       state.cartItems = [];
+      showToast('success', 'Cart Cleared');
     },
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = addCart.actions;
+export const { addToCart, removeFromCart, clearCart, updateCartQuantity } = addCart.actions;
 export default addCart.reducer;
 
 // import { createSlice } from '@reduxjs/toolkit';

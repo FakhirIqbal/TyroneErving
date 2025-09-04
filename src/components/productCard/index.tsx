@@ -214,12 +214,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
             onPress={favOnpress}
             style={[
               styles.iconButton,
-              // { backgroundColor: item.fav ? COLORS.orange : COLORS.black },
+              { backgroundColor: item.fav ? COLORS.orange : COLORS.black },
             ]}
           >
             <Icon
-              // name={item.fav ? 'heart' : 'heart-outline'}
-              name={'heart-outline'}
+              name={item.fav ? 'heart' : 'heart-outline'}
+              // name={'heart-outline'}
               size={wp(4.5)}
               color={COLORS.white}
             />

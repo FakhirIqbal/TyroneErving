@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CartDetailProp } from './interface';
 import { useForm, Controller } from 'react-hook-form';
+import { Country, State, City } from "country-state-city";
 import { StyleSheet, View, ScrollView } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -16,10 +17,24 @@ import WrapperContainer from '../../components/common/customWrapper';
 import CustomPhoneInput from '../../components/common/customPhoneinput';
 
 const CartDetail = ({ navigation }: any) => {
+
+
+  const countryOptions = useMemo(
+    () =>
+      Country.getAllCountries().map((c) => ({
+        label: c.name,
+        value: c.isoCode,
+      })),
+    []
+  );
+
   const {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
+    setValue,
+    clearErrors,
   } = useForm<CartDetailProp>({
     defaultValues: {
       FullName: '',
@@ -31,11 +46,35 @@ const CartDetail = ({ navigation }: any) => {
       Address: '',
       City: '',
     },
+    shouldFocusError: true,
   });
+  const selectedCountry = watch('Country');
+  const selectedState = watch('State');
+
+
+  const stateOptions = useMemo(() => {
+    if (!selectedCountry) return [];
+    return State.getStatesOfCountry(selectedCountry).map((s) => ({
+      label: s.name,
+      value: s.isoCode,
+    }));
+  }, [selectedCountry]);
+
+  const cityOptions = useMemo(() => {
+    if (!selectedCountry || !selectedState) return [];
+    return City.getCitiesOfState(selectedCountry, selectedState).map((c) => ({
+      label: c.name,
+      value: c.name,
+    }));
+  }, [selectedCountry, selectedState]);
+
+
+
+
 
   const onSubmit = (data: CartDetailProp) => {
     console.log('Cart Detail Data:', data);
-    navigation.navigate('PaymentMethod');
+    // navigation.navigate('PaymentMethod');
   };
 
   return (
@@ -68,7 +107,8 @@ const CartDetail = ({ navigation }: any) => {
           name="PhoneNumber"
           rules={{
             required: 'Phone number is required',
-            minLength: { value: 10, message: 'Too short' },
+            validate: (value: any) =>
+              value?.is_valid ? true : 'Invalid phone number format',
           }}
           render={({ field: { onChange, value } }) => (
             <CustomPhoneInput
@@ -106,13 +146,14 @@ const CartDetail = ({ navigation }: any) => {
             <CustomDropdown
               label="Country"
               placeholder="Select Country"
-              options={[
-                { label: 'USA', value: 'usa' },
-                { label: 'UK', value: 'uk' },
-                { label: 'UAE', value: 'uae' },
-              ]}
+              options={countryOptions}
               value={value}
-              onChange={onChange}
+              onChange={(val: string) => {
+                onChange(val);
+                setValue('State', '');
+                setValue('City', '');
+                clearErrors(['State', 'City']);
+              }}
               error={errors.Country?.message}
             />
           )}
@@ -125,11 +166,16 @@ const CartDetail = ({ navigation }: any) => {
               name="State"
               rules={{ required: 'State is required' }}
               render={({ field: { onChange, value } }) => (
-                <CustomInput
+                <CustomDropdown
                   label="State"
-                  placeholder="Enter state"
+                  placeholder={selectedCountry ? "Select state" : "Select country first"}
+                  options={stateOptions}
                   value={value}
-                  onChangeText={onChange}
+                  onChange={(val: string) => {
+                    onChange(val);
+                    setValue('City', '');
+                    clearErrors('City');
+                  }}
                   error={errors.State?.message}
                 />
               )}
@@ -142,11 +188,18 @@ const CartDetail = ({ navigation }: any) => {
               name="City"
               rules={{ required: 'City is required' }}
               render={({ field: { onChange, value } }) => (
-                <CustomInput
+                <CustomDropdown
                   label="City"
-                  placeholder="Enter city"
+                  placeholder={
+                    selectedCountry
+                      ? selectedState
+                        ? "Select city"
+                        : "Select state first"
+                      : "Select country first"
+                  }
+                  options={cityOptions}
                   value={value}
-                  onChangeText={onChange}
+                  onChange={onChange}
                   error={errors.City?.message}
                 />
               )}

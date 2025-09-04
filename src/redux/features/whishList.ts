@@ -1,34 +1,48 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { Product } from './types';
-import { Alert } from 'react-native';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Wishlist } from './types';
+import { showToast } from '../../utils/helper';
+
+interface WishlistState {
+  wishlist: Wishlist[];
+}
+
+const initialState: WishlistState = {
+  wishlist: [],
+};
 
 export const whishList = createSlice({
   name: 'whishList',
-  initialState: {
-    items: [] as Product[],
-  },
+  initialState,
   reducers: {
-    addToWhishList: (state, action) => {
-      const item = action.payload;
-      const existingItem = state.items.find(
-        wishItem => wishItem.id === item.id,
-      );
-
-      if (existingItem) {
-        return Alert.alert('', 'Item already exists in the wishlist');
+    addToWishlist: (state, action: PayloadAction<Wishlist>) => {
+      const exists = state?.wishlist.find(p => p.id === action.payload.id);
+      if (exists) {
+        showToast('info', 'Item Already In Wishlist');
+      } else {
+        state.wishlist.push({ ...action.payload, fav: true });
+        showToast('success', 'Item Added To Wishlist');
       }
-      state.items.push(item);
     },
-    removeFromWhishList: (state, action) => {
-      const id = action.payload;
-      state.items = state.items.filter(item => item.id !== id);
+    removeFromWishlist: (state, action: PayloadAction<Wishlist>) => {
+      // if (!state.wishlist) {
+      //   state.wishlist = [];
+      // }
+      const exists = state?.wishlist.find(p => p.id === action.payload.id);
+      if (exists) {
+        state.wishlist = state.wishlist.filter(p => p.id !== action.payload.id);
+        showToast('info', 'Item Removed From Wishlist');
+      }
     },
-    clearWhishList: state => {
-      state.items = [];
+    clearWhishList: (state) => {
+      state.wishlist = [];
     },
   },
 });
 
-export const { addToWhishList, removeFromWhishList, clearWhishList } =
-  whishList.actions;
+
+export const {
+  clearWhishList,
+  addToWishlist,
+  removeFromWishlist,
+} = whishList.actions;
 export default whishList.reducer;

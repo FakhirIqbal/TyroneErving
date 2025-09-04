@@ -28,7 +28,7 @@ import useProducts from './useProducts';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/features/addCart';
 import { RootState } from '../../redux/store';
-import { addToWhishList } from '../../redux/features/whishList';
+import { addToWishlist } from '../../redux/features/whishList';
 import { TextNormal } from '../../components/common/customText';
 import { Font } from '../../utils/ImagePath';
 
@@ -50,7 +50,7 @@ const Home = ({ navigation }: any) => {
     handleSearch,
     search,
   } = useProducts(selected);
-  console.log('Trn', allProducts);
+  // console.log('Trn', allProducts);
   const addCart = useCallback(
     (item: any) => {
       if (!item) return;
@@ -64,7 +64,7 @@ const Home = ({ navigation }: any) => {
       <ProductCard
         isLoading={!item}
         item={item}
-        favOnpress={() => item && dispatch(addToWhishList(item))}
+        favOnpress={() => item && dispatch(addToWishlist(item))}
         crtOnpress={() => item && addCart(item)}
         navigation={navigation}
       />

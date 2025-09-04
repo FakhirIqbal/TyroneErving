@@ -20,25 +20,30 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import Customimage from '../../components/common/customImage';
 import { RootState } from '../../redux/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeFromCart, updateCartQuantity } from '../../redux/features/addCart';
+import { TouchableOpacity } from 'react-native';
 
 const DELIVERY_FEE = 50;
 
 const Cart = ({ navigation }: any) => {
+  const dispatch = useDispatch()
   const cartData = useSelector((state: RootState) => state.cart.cartItems);
-  console.log('Cart Data', cartData);
-  const [cartItems, setCartItems] = useState<CartItem[]>(products);
+  // console.log('cartData', cartData[0].colors[0].images[0]);
+  // const [cartItems, setCartItems] = useState<CartItem[]>(products);
 
-  const handleQuantityChange = (index: number, newQuantity: number) => {
-    const updatedItems = [...cartItems];
-    updatedItems[index].quantity = newQuantity;
-    setCartItems(updatedItems);
-  };
+  // const handleQuantityChange = (index: number, newQuantity: number) => {
+  //   const updatedItems = [...cartItems];
+  //   updatedItems[index].quantity = newQuantity;
+  //   setCartItems(updatedItems);
+  // };
 
-  const totalItemsPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+  const totalItemsPrice = cartData.reduce(
+    (total, item) => total + item.base_price * (item.quantity || 1),
     0,
   );
 
@@ -46,9 +51,19 @@ const Cart = ({ navigation }: any) => {
 
   const renderItem = ({ item, index }: { item: any; index: number }) => (
     <View style={styles.cardContainer}>
+      <TouchableOpacity
+        style={styles.cancelIcon}
+        onPress={() => {
+          // Example: remove from cart or wishlist
+          dispatch(removeFromCart(item.id));
+        }}
+      >
+        <Ionicons name="close-circle" size={20} color="#000" />
+      </TouchableOpacity>
       <View style={styles.cardLeft}>
         <Customimage
-          source={item.image}
+          // source={item.image}
+          source={{ uri: item?.colors?.[0]?.images?.[0] }}
           style={styles.image}
           resizeMode="contain"
         />
@@ -56,13 +71,22 @@ const Cart = ({ navigation }: any) => {
           <TextSmall style={styles.productSize}>{item.name}</TextSmall>
           <TextSmall>${item?.base_price?.toFixed(2)}</TextSmall>
           <TextSmall>
-            Size: <Text style={styles.productSize}>{item.size}</Text>
+            Size:
+            {item?.sizes?.map((s: { id: string; size_label: string }, idx: number) => (
+              <Text key={s.id || idx} style={styles.productSize}>
+                {s.size_label}{idx !== item.sizes.length - 1 ? ', ' : ''}
+              </Text>
+            ))}
           </TextSmall>
+
+
         </View>
       </View>
       <QuantitySelector
-        value={item?.quantity}
-        onChange={val => handleQuantityChange(index, val)}
+        value={(item.quantity || 1)}
+        onChange={(val) => {
+          dispatch(updateCartQuantity({ id: item.id, quantity: val }))
+        }}
       />
     </View>
   );
@@ -80,51 +104,60 @@ const Cart = ({ navigation }: any) => {
           contentContainerStyle={{ marginTop: hp(2) }}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={() => {
-            return (
-              <>
-                <View style={styles.amountContainer}>
-                  <TextSmall style={styles.sectionTitle}>Amount</TextSmall>
+            if (cartData.length > 0) {
+              return (
+                <>
+                  <View style={styles.amountContainer}>
+                    <TextSmall style={styles.sectionTitle}>Amount</TextSmall>
 
-                  {cartData.map(item => (
-                    <View key={item.id} style={styles.row}>
+                    {cartData.map(item => (
+                      <View key={item.id} style={styles.row}>
+                        <TextSmall style={styles.productSize}>
+                          {item.name}
+                        </TextSmall>
+                        <TextSmall>
+                          ${(item.base_price * item?.quantity).toFixed(2)}
+                        </TextSmall>
+                      </View>
+                    ))}
+
+                    <View style={[styles.row, { marginTop: hp(1.5) }]}>
                       <TextSmall style={styles.productSize}>
-                        {item.name}
+                        Delivery Fee
                       </TextSmall>
-                      <TextSmall>
-                        ${(item.base_price * item?.quantity).toFixed(2)}
+                      <TextSmall>${DELIVERY_FEE.toFixed(2)}</TextSmall>
+                    </View>
+
+                    <View
+                      style={{
+                        borderBottomColor: COLORS.darkGray,
+                        borderBottomWidth: wp(0.2),
+                        marginVertical: hp(1.5),
+                      }}
+                    />
+
+                    <View style={[styles.row]}>
+                      <TextSmall style={styles.totalText}>Total</TextSmall>
+                      <TextSmall style={styles.totalText}>
+                        ${total.toFixed(2)}
                       </TextSmall>
                     </View>
-                  ))}
-
-                  <View style={[styles.row, { marginTop: hp(1.5) }]}>
-                    <TextSmall style={styles.productSize}>
-                      Delivery Fee
-                    </TextSmall>
-                    <TextSmall>${DELIVERY_FEE.toFixed(2)}</TextSmall>
                   </View>
-
-                  <View
-                    style={{
-                      borderBottomColor: COLORS.darkGray,
-                      borderBottomWidth: wp(0.2),
-                      marginVertical: hp(1.5),
-                    }}
+                  <CustomButton
+                    title="Checkout"
+                    onPress={() => navigation.navigate('CartDetail')}
                   />
-
-                  <View style={[styles.row]}>
-                    <TextSmall style={styles.totalText}>Total</TextSmall>
-                    <TextSmall style={styles.totalText}>
-                      ${total.toFixed(2)}
-                    </TextSmall>
-                  </View>
-                </View>
-                <CustomButton
-                  title="Checkout"
-                  onPress={() => navigation.navigate('CartDetail')}
-                />
-              </>
-            );
+                </>
+              );
+            }
           }}
+          ListEmptyComponent={
+            <View style={{ flex: 1, alignItems: 'center', marginTop: hp(30) }}>
+              <TextSmall style={{ fontSize: RFValue(16), color: COLORS.darkGray }}>
+                🛒 Your cart is empty
+              </TextSmall>
+            </View>
+          }
         />
       </View>
 
@@ -217,6 +250,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: RFValue(14),
   },
+  cancelIcon: {
+    position: 'absolute',
+    top: 1,
+    right: 1,
+    zIndex: 10,
+  },
+
 });
 
 const products: CartItem[] = [

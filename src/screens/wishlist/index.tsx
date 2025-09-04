@@ -7,9 +7,10 @@ import ProductCard from '../../components/productCard';
 import WrapperContainer from '../../components/common/customWrapper';
 import Header from '../../components/common/Header';
 import { RootState } from '../../redux/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TextNormal } from '../../components/common/customText';
 import { heightPercentageToDP } from 'react-native-responsive-screen';
+import { removeFromWishlist } from '../../redux/features/whishList';
 
 // const products = [
 //   {
@@ -57,7 +58,8 @@ import { heightPercentageToDP } from 'react-native-responsive-screen';
 // ];
 
 const Wishlist = ({ navigation }: any) => {
-  const whishList = useSelector((state: RootState) => state.whishList.items);
+  const dispatch = useDispatch();
+  const whishList = useSelector((state: RootState) => state.whishList.wishlist);
   return (
     <WrapperContainer>
       <Header title="Wishlist" navigation={navigation} />
@@ -76,7 +78,7 @@ const Wishlist = ({ navigation }: any) => {
         bounces={false}
         data={whishList}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }: { item: any }) => <ProductCard item={item} />}
+        renderItem={({ item }: { item: any }) => <ProductCard item={item} favOnpress={() => item && dispatch(removeFromWishlist(item))} />}
         keyExtractor={item => item.id}
         numColumns={2}
         columnWrapperStyle={styles.row}
