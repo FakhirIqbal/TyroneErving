@@ -120,6 +120,7 @@ const EditProHook = () => {
         console.log('Success', response.data);
         showToast('success', 'Profile updated successfully');
         setloading(false);
+        navigation.goBack();
       } else {
         showToast('error', response?.error);
         console.log('Error', response?.error);

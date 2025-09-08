@@ -11,14 +11,15 @@ import {
 import CustomButton from '../common/customButton';
 import CustomHeading from '../customHeading';
 import Customimage from '../common/customImage';
+import { TextSmall } from '../common/customText';
 
 const HomeBanner = () => {
   return (
     <View style={styles.banner}>
       <View style={styles.bannerLeft}>
-        <Text style={styles.tag}>New Collection</Text>
+        <TextSmall textStyle={styles.tag}>New Collection</TextSmall>
         <CustomHeading text="Incredible experience" />
-        <Text style={styles.subText}>Become unique in your individuality</Text>
+        <TextSmall  textStyle={styles.subText}>Become unique in your individuality</TextSmall>
         <CustomButton
           title="Explore now"
           onPress={() => { }}

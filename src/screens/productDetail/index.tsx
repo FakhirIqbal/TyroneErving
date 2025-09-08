@@ -45,7 +45,7 @@ const ProductDetail = ({ navigation, route }: any) => {
         bounces={false}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={false} onRefresh={() => {}} />
+          <RefreshControl refreshing={false} onRefresh={() => { }} />
         }
       >
         <CustomHeader
@@ -70,7 +70,7 @@ const ProductDetail = ({ navigation, route }: any) => {
               alignSelf: 'center',
               // marginVertical: hp(3),
             }}
-            // resizeMode={'contain'}
+          // resizeMode={'contain'}
           />
         </View>
 
@@ -131,15 +131,14 @@ const ProductDetail = ({ navigation, route }: any) => {
         <Text style={styles.subHeading}>Add prescription:</Text>
         <Text style={styles.text}>{data?.prescription}</Text>
 
-        <View
-          style={{ marginBottom: hp(2), flex: 1, justifyContent: 'flex-end' }}
-        >
+        <View style={{ marginBottom: hp(2), flex: 1, justifyContent: 'flex-end' }}>
           <CustomButton
-            onPress={() => navigation.navigate('Cart')}
             title="Add to cart"
             style={{ marginTop: hp(4) }}
+            onPress={() => navigation.navigate('Cart')}
           />
         </View>
+        
       </ScrollView>
     </WrapperContainer>
   );

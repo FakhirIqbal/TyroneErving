@@ -15,6 +15,9 @@ export const whishList = createSlice({
   initialState,
   reducers: {
     addToWishlist: (state, action: PayloadAction<Wishlist>) => {
+      if (!state.wishlist) {
+        state.wishlist = [];
+      }
       const exists = state?.wishlist.find(p => p.id === action.payload.id);
       if (exists) {
         showToast('info', 'Item Already In Wishlist');

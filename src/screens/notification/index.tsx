@@ -1,16 +1,14 @@
-import { Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+
 import React from 'react';
-
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-
-import WrapperContainer from '../../components/common/customWrapper';
-import { ImagePath } from '../../utils/ImagePath';
 import Header from '../../components/common/Header';
-import { TextNormal } from '../../components/common/customText';
+import WrapperContainer from '../../components/common/customWrapper';
 import CustomNotification from '../../components/customNotification';
+
+import { ImagePath } from '../../utils/ImagePath';
+import { FlatList, StyleSheet } from 'react-native';
+import { TextNormal } from '../../components/common/customText';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 const Notification = ({ navigation }: any) => {
   const data = [

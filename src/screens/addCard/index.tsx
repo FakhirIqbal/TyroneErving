@@ -291,18 +291,17 @@ const AddCard = ({ navigation }: any) => {
     <WrapperContainer>
       <Header
         title="New Card"
-        // onPress={() => {
-        //   navigation.goBack();
-        // }}
+        navigation={navigation}
+      // onPress={() => {
+      //   navigation.goBack();
+      // }}
       />
       <ScrollView
         bounces={false}
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
-        <View
-          style={{ flex: 1, justifyContent: 'space-between', padding: wp(5) }}
-        >
+        <View>
           <View style={{ marginTop: hp(3) }}>
             <CustomHeading text="Add New Card" />
             <TextSmall textStyle={styles.subText}>
@@ -475,6 +474,7 @@ const AddCard = ({ navigation }: any) => {
               <TouchableOpacity
                 onPress={() => setRememberCard(!rememberCard)}
                 style={styles.checkboxContainer}
+                activeOpacity={1}
               >
                 <View
                   style={[
@@ -495,8 +495,8 @@ const AddCard = ({ navigation }: any) => {
             <CustomButton
               title={loading ? 'Adding Card...' : 'Add Card'}
               onPress={handleSubmit(onSubmit)}
-              // disabled={loading}
-              // loading={loading}
+            // disabled={loading}
+            // loading={loading}
             />
           </View>
         </View>
@@ -519,7 +519,7 @@ const styles = StyleSheet.create({
     marginBottom: hp(2),
   },
   label: {
-    fontSize: RFValue(14),
+    fontSize: RFValue(12),
     fontWeight: '500',
     marginBottom: hp(1),
     color: COLORS.primaryText,
@@ -528,8 +528,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.gray,
     borderRadius: 8,
-    padding: wp(4),
-    fontSize: RFValue(16),
+    height: hp(5.5),
+    paddingHorizontal: wp(4),
+    fontSize: RFValue(10),
     color: COLORS.primaryText,
     backgroundColor: COLORS.white,
   },
@@ -537,9 +538,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.error,
   },
   errorText: {
+     marginTop: hp(0.5),
     color: COLORS.error,
-    fontSize: RFValue(12),
-    marginTop: hp(0.5),
+    fontSize: RFValue(10),
   },
   rowContainer: {
     flexDirection: 'row',

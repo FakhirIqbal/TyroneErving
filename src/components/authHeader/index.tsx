@@ -1,6 +1,6 @@
 import { COLORS } from '../../utils/theme';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,

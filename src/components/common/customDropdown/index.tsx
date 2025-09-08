@@ -5,6 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { TextNormal } from '../customText';
 
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -20,7 +21,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     return (
         <View style={[styles.container, style]}>
 
-            {label && <Text style={styles.label}>{label}</Text>}
+            {label && <TextNormal textStyle={styles.label}>{label}</TextNormal>}
 
             <Dropdown
                 style={[
@@ -40,7 +41,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                 }}
             />
 
-            {error && <Text style={styles.errorText}>{error}</Text>}
+            {error && <TextNormal textStyle={styles.errorText}>{error}</TextNormal>}
         </View>
     );
 };

@@ -1,60 +1,12 @@
-// import React from 'react';
-// import { COLORS } from '../../utils/theme';
-// import { ScrollView, Text, View } from 'react-native';
-// import { SafeAreaView } from 'react-native-safe-area-context';
-// import { RFValue } from 'react-native-responsive-fontsize';
-// import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-
-// import CustomHeader from '../../components/common/customHeader';
-
-// const PrivacyPolicy = ({ navigation }: any) => {
-//     return (
-//         <SafeAreaView style={{ flex: 1, padding: 20, backgroundColor: COLORS.white }}>
-//             <ScrollView
-//                 contentContainerStyle={{ flexGrow: 1 }}
-//                 showsVerticalScrollIndicator={false}
-//             >
-//                 <CustomHeader title="Privacy Policy" onBack={() => navigation.goBack()} />
-
-//                 <View style={{ marginTop: hp(2.5) }}>
-//                     <Text style={{ fontWeight: '600', fontSize: RFValue(13), marginBottom: hp(2) }}>
-//                         Consectetur Sadipscing Elitr
-//                     </Text>
-//                     <Text style={{ marginBottom: hp(1.5), fontWeight: '300' }}>
-//                         There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
-//                     </Text>
-//                     <Text style={{ marginBottom: hp(1.5), fontWeight: '300' }}>
-//                         If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
-//                     </Text>
-//                     <Text style={{ marginBottom: hp(1.5), fontWeight: '300' }}>
-//                         It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
-//                     </Text>
-//                 </View>
-
-//             </ScrollView>
-//         </SafeAreaView>
-//     );
-// };
-
-// export default PrivacyPolicy;
-
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import WrapperContainer from '../../components/common/customWrapper';
 import Header from '../../components/common/Header';
-import { RFValue } from 'react-native-responsive-fontsize';
+import WrapperContainer from '../../components/common/customWrapper';
+
 import { Font } from '../../utils/ImagePath';
-import {
-  TextHuge,
-  TextNormal,
-  TextSmall,
-  TextSmaller,
-} from '../../components/common/customText';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { TextNormal, TextSmall, TextSmaller } from '../../components/common/customText';
 
 const PrivacyPolicy = ({ navigation }: any) => {
   const data = [
