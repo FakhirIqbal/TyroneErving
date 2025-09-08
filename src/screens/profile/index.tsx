@@ -1,19 +1,16 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import useUser from '../../utils/useUser';
+import Header from '../../components/common/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Customimage from '../../components/common/customImage';
+
 import { COLORS } from '../../utils/theme';
 import { ScreenNames } from '../../navigation/ScreenName';
-import Header from '../../components/common/Header';
-import { widthPercentageToDP } from 'react-native-responsive-screen';
-import Customimage from '../../components/common/customImage';
-import useUser from '../../utils/useUser';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { TextSmall, TextNormal } from '../../components/common/customText';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 const menuItems = [
   {
@@ -73,8 +70,8 @@ const Profile = ({ navigation }: any) => {
             style={styles.avatar}
           />
           <View>
-            <Text style={styles.name}>{user?.data?.name}</Text>
-            <Text style={styles.email}>{user?.data?.email}</Text>
+            <TextNormal textStyle={{ color: COLORS.white }}>{user?.data?.name}</TextNormal>
+            <TextSmall style={{ color: COLORS.white }}>{user?.data?.email}</TextSmall>
           </View>
           <Ionicons
             name="person-add-outline"
@@ -95,7 +92,7 @@ const Profile = ({ navigation }: any) => {
             activeOpacity={0.7}
           >
             <Ionicons name={item.icon} size={26} color="#f25c2f" />
-            <Text style={styles.menuText}>{item.label}</Text>
+            <TextSmall textStyle={styles.menuText}>{item.label}</TextSmall>
             <Ionicons name="chevron-forward" size={18} color="#ccc" />
           </TouchableOpacity>
         ))}
@@ -110,45 +107,36 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   header: {
+    paddingTop: hp(6.5),
+    marginBottom: hp(2),
+    borderBottomRightRadius: wp(7.5),
+    borderBottomLeftRadius: wp(7.5),
     backgroundColor: COLORS.orange,
-    paddingTop: 60,
-    borderBottomRightRadius: 30,
-    borderBottomLeftRadius: 30,
-    marginBottom: 20,
   },
   info: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 30,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    padding: wp(5),
+    paddingTop: hp(3),
+    borderBottomLeftRadius: wp(7.5),
+    borderBottomRightRadius: wp(7.5),
   },
   navigationContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 30,
+    marginHorizontal: wp(6),
+    justifyContent: 'space-between',
   },
   title: {
-    fontSize: 22,
+    fontSize: RFValue(20),
     fontWeight: 'bold',
     color: COLORS.white,
   },
   avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
-    marginRight: 15,
-  },
-  name: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  email: {
-    color: COLORS.white,
-    fontSize: 13,
+    width: wp(17),
+    height: hp(8),
+    borderRadius: 999,
+    marginRight: wp(3),
   },
   iconRight: {
     marginLeft: 'auto',
@@ -156,15 +144,15 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 14,
-    marginHorizontal: 20,
-    borderBottomWidth: 0.6,
     borderColor: '#eee',
+    borderBottomWidth: 0.6,
+    marginHorizontal: wp(5),
+    paddingVertical: hp(1.7),
   },
   menuText: {
     flex: 1,
-    marginLeft: 15,
-    fontSize: 16,
+    marginLeft: wp(3),
+    fontWeight: '500',
     color: COLORS.secondaryText,
   },
 });

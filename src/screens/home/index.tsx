@@ -1,41 +1,30 @@
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  RefreshControl,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+
+import React from 'react';
+import useProducts from './useProducts';
 import HomeHeader from '../../components/homeHeader';
 import HomeBanner from '../../components/homeBanner';
-import RateAppModal from '../../components/rateAppModal/RateAppModal';
-import { COLORS } from '../../utils/theme';
-import CustomHeading from '../../components/customHeading';
 import ProductCard from '../../components/productCard';
-import WrapperContainer from '../../components/common/customWrapper';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
 import Feather from 'react-native-vector-icons/Feather';
-import useProducts from './useProducts';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../../redux/features/addCart';
-import { RootState } from '../../redux/store';
-import { addToWishlist } from '../../redux/features/whishList';
-import { TextNormal } from '../../components/common/customText';
+import WrapperContainer from '../../components/common/customWrapper';
+
+import { COLORS } from '../../utils/theme';
+import { useDispatch } from 'react-redux';
 import { Font } from '../../utils/ImagePath';
+import { useCallback, useMemo, useState } from 'react';
+import { addToCart } from '../../redux/features/addCart';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { addToWishlist } from '../../redux/features/whishList';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { TextNormal, TextSmaller } from '../../components/common/customText';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { View, StyleSheet, RefreshControl, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+
 
 const Home = ({ navigation }: any) => {
+
   const TABBARHEIGHT = useBottomTabBarHeight();
   const dispatch = useDispatch();
-  // const categories = ['All', 'New Arrivals', 'Top Pick', 'Men', 'Women'];
+  
   const categories = ['All', 'New Arrivals', 'male', 'female'];
   const [selected, setSelected] = useState('All');
 
@@ -79,14 +68,14 @@ const Home = ({ navigation }: any) => {
         style={[styles.category, selected === cat && styles.categorySelected]}
         onPress={() => setSelected(cat)}
       >
-        <Text
+        <TextSmaller
           style={[
-            styles.categoryText,
+            { color: COLORS.darkGray },
             selected === cat && styles.categoryTextSelected,
           ]}
         >
           {cat}
-        </Text>
+        </TextSmaller>
       </TouchableOpacity>
     ),
     [selected],
@@ -185,9 +174,7 @@ const Home = ({ navigation }: any) => {
           ) : null
         }
         ListEmptyComponent={
-          <TextNormal
-            style={{ color: '#000', alignSelf: 'center', marginTop: hp(15) }}
-          >
+          <TextNormal style={{ color: '#000', alignSelf: 'center', marginTop: hp(15) }}>
             No product found
           </TextNormal>
         }
@@ -225,11 +212,6 @@ const styles = StyleSheet.create({
   },
   categorySelected: {
     backgroundColor: COLORS.orange,
-  },
-  categoryText: {
-    fontSize: RFValue(11),
-    color: COLORS.darkGray,
-    fontWeight: '500',
   },
   categoryTextSelected: {
     color: COLORS.white,

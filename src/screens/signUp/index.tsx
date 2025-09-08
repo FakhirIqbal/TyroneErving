@@ -1,34 +1,21 @@
 import React from 'react';
-import { COLORS } from '../../utils/theme';
-import { SignUpFormData } from './interface';
-import { useForm, Controller } from 'react-hook-form';
-import { RFValue } from 'react-native-responsive-fontsize';
-
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-
+import useAuth from '../../services/AuthService';
 import AuthHeader from '../../components/authHeader';
 import CustomInput from '../../components/common/customInput';
 import CustomButton from '../../components/common/customButton';
 import CustomDropdown from '../../components/common/customDropdown';
 import CustomCheckbox from '../../components/common/customCheckbox';
-import CustomPhoneInput from '../../components/common/customPhoneinput';
-import { ScreenNames } from '../../navigation/ScreenName';
 import WrapperContainer from '../../components/common/customWrapper';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import useAuth from '../../services/AuthService';
+import CustomPhoneInput from '../../components/common/customPhoneinput';
+
+import { COLORS } from '../../utils/theme';
+import { SignUpFormData } from './interface';
+import { useForm, Controller } from 'react-hook-form';
+import { ScreenNames } from '../../navigation/ScreenName';
+import { TextSmaller } from '../../components/common/customText';
 import { PhoneNumberValue } from '../../components/common/customPhoneinput/interface';
+import { View, StyleSheet, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const SignUp = ({ navigation }: any) => {
   const {
@@ -54,7 +41,7 @@ const SignUp = ({ navigation }: any) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1 }}
-      // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+    // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
       <WrapperContainer>
         <ScrollView
@@ -184,24 +171,23 @@ const SignUp = ({ navigation }: any) => {
             />
           </View>
 
-          <View
-            style={{ flex: 1, justifyContent: 'flex-end', marginBottom: hp(4) }}
-          >
-            <Text style={styles.accText}>
+          <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: hp(4) }}>
+            <TextSmaller textStyle={styles.accText}>
               Already Have Account{' '}
-              <Text
-                style={{ color: COLORS.orange }}
+              <TextSmaller
+                textStyle={{ color: COLORS.orange }}
                 onPress={() => navigation.navigate(ScreenNames.SIGNIN)}
               >
                 SignIn Now!
-              </Text>
-            </Text>
+              </TextSmaller>
+            </TextSmaller>
             <CustomButton
-              isloading={isloading}
               title="Continue"
+              isloading={isloading}
               onPress={handleSubmit(onSubmit)}
             />
           </View>
+
         </ScrollView>
       </WrapperContainer>
     </KeyboardAvoidingView>
@@ -215,9 +201,8 @@ const styles = StyleSheet.create({
     padding: wp(5),
   },
   accText: {
-    fontSize: RFValue(12),
-    marginVertical: hp(2),
     textAlign: 'center',
     color: COLORS.black,
+    marginVertical: hp(2),
   },
 });

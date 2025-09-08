@@ -1,35 +1,19 @@
 import React from 'react';
-import { COLORS } from '../../utils/theme';
-import { SignInFormData } from './interface';
-import { useForm, Controller } from 'react-hook-form';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import {
-  View,
-  Text,
-  Platform,
-  Keyboard,
-  ScrollView,
-  StyleSheet,
-  KeyboardAvoidingView,
-} from 'react-native';
-
+import useAuth from '../../services/AuthService';
 import AuthHeader from '../../components/authHeader';
 import CustomInput from '../../components/common/customInput';
 import CustomButton from '../../components/common/customButton';
 import CustomCheckbox from '../../components/common/customCheckbox';
 import WrapperContainer from '../../components/common/customWrapper';
-import useAuth from '../../services/AuthService';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+
+import { COLORS } from '../../utils/theme';
+import { SignInFormData } from './interface';
+import { useForm, Controller } from 'react-hook-form';
+import { TextSmaller } from '../../components/common/customText';
+import { View, Platform, ScrollView, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const SignIn = ({ navigation }: any) => {
-  const userData = useSelector((state: RootState) => state.userData);
-  console.log('User ', userData);
   const {
     control,
     handleSubmit,
@@ -43,7 +27,7 @@ const SignIn = ({ navigation }: any) => {
   });
   const { userLogin, isloading } = useAuth();
   const onSubmit = (data: SignInFormData) => {
-    console.log('Form Data:', data);
+    // console.log('Form Data:', data);
     userLogin(data);
   };
 
@@ -127,39 +111,37 @@ const SignIn = ({ navigation }: any) => {
                   />
                 )}
               />
-              <Text
-                style={{
-                  fontSize: RFValue(12),
+              <TextSmaller
+                textStyle={{
                   color: COLORS.orange,
                   marginTop: hp(1),
                 }}
                 onPress={() => navigation.navigate('ForgetPass')}
               >
                 Forgot Password?
-              </Text>
+              </TextSmaller>
             </View>
           </View>
 
-          <View
-            style={{ flex: 1, justifyContent: 'flex-end', marginBottom: hp(4) }}
-          >
-            <Text style={styles.accText}>
+          <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: hp(4) }}>
+            <TextSmaller textStyle={styles.accText}>
               {' '}
-              Don't Have Account{' '}
-              <Text
-                style={{ color: COLORS.orange }}
+              Don't Have Account?{' '}
+              <TextSmaller
+                textStyle={{ color: COLORS.orange }}
                 onPress={() => navigation.goBack()}
               >
                 {' '}
                 SignUp Now!{' '}
-              </Text>{' '}
-            </Text>
+              </TextSmaller>{' '}
+            </TextSmaller>
             <CustomButton
               isloading={isloading}
               title="Continue"
               onPress={handleSubmit(onSubmit)}
             />
           </View>
+
         </ScrollView>
       </WrapperContainer>
     </KeyboardAvoidingView>
@@ -174,9 +156,8 @@ const styles = StyleSheet.create({
     padding: wp(5),
   },
   accText: {
-    fontSize: RFValue(12),
-    marginVertical: hp(2),
     textAlign: 'center',
     color: COLORS.black,
+    marginVertical: hp(2),
   },
 });

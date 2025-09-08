@@ -157,6 +157,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Customimage from '../common/customImage';
 import React from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { TextNormal } from '../common/customText';
 
 const ProductCard: React.FC<ProductCardProps> = ({
   item,
@@ -197,16 +198,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
           />
 
           <View style={styles.textContainer}>
-            <Text
-              style={styles.productName}
+            <TextNormal
+              textStyle={styles.productName}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {item?.name}
-            </Text>
-            <Text style={styles.productPrice}>
+            </TextNormal>
+            <TextNormal textStyle={styles.productPrice}>
               ${item?.base_price?.toFixed(2)}
-            </Text>
+            </TextNormal>
           </View>
         </Pressable>
         <View style={styles.actions}>

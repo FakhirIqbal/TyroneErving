@@ -1,31 +1,23 @@
-import React, { useState } from 'react';
-import { COLORS } from '../../utils/theme';
-import { useForm, Controller } from 'react-hook-form';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  ScrollView,
-} from 'react-native';
 
-import CustomInput from '../../components/common/customInput';
-import CustomButton from '../../components/common/customButton';
-import CustomDropdown from '../../components/common/customDropdown';
-import CustomPhoneInput from '../../components/common/customPhoneinput';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import WrapperContainer from '../../components/common/customWrapper';
-import { heightPercentageToDP } from 'react-native-responsive-screen';
+import React from 'react';
+import EditProHook from './useEditPro';
+import useUser from '../../utils/useUser';
 import Header from '../../components/common/Header';
 import Customimage from '../../components/common/customImage';
-import EditProHook from './useEditPro';
+import CustomInput from '../../components/common/customInput';
+import CustomButton from '../../components/common/customButton';
+import WrapperContainer from '../../components/common/customWrapper';
+import CustomPhoneInput from '../../components/common/customPhoneinput';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+
+import { useState } from 'react';
+import { COLORS } from '../../utils/theme';
+import { Controller } from 'react-hook-form';
+import { TextBig } from '../../components/common/customText';
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 import { PhoneNumberValue } from '../../components/common/customPhoneinput/interface';
-import useUser from '../../utils/useUser';
+import { View, Platform, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
+
 
 const EditProfile = ({ navigation }: any) => {
   const {
@@ -38,15 +30,12 @@ const EditProfile = ({ navigation }: any) => {
     loading,
   } = EditProHook();
 
-  const onSubmit = (data: any) => {
-    console.log('Profile Data:', data);
-  };
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
+
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
-
   const onEditProfile = () => {
     if (!isEditing) {
       return;
@@ -54,18 +43,18 @@ const EditProfile = ({ navigation }: any) => {
     const submit = handleSubmit(data => onEdit(data, navigation));
     return submit();
   };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1 }}
-      // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+    // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
       <WrapperContainer>
         <ScrollView
           bounces={false}
           contentContainerStyle={{
             flexGrow: 1,
-            // justifyContent: 'space-between',
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -97,7 +86,7 @@ const EditProfile = ({ navigation }: any) => {
                 />
               )}
             </View>
-            <Text style={styles.name}>{user?.data?.name}</Text>
+            <TextBig textStyle={styles.name}>{user?.data?.name}</TextBig>
 
             <View>
               <Controller
@@ -217,14 +206,10 @@ const EditProfile = ({ navigation }: any) => {
               marginBottom: heightPercentageToDP(4),
             }}
           >
-            {/* <CustomButton
-              title="Update"
-              onPress={handleSubmit(onSubmit)}
-              style={{ width: '100%' }}
-            /> */}
             <CustomButton
               title={isEditing ? 'Save Changes' : 'Edit Profile'}
-              onPress={!isEditing ? toggleEdit : onEditProfile}
+              onPress={isEditing ? onEditProfile : toggleEdit}
+              variant={isEditing ? 'dark' : 'default'}
               isloading={loading}
             />
           </View>
@@ -236,30 +221,23 @@ const EditProfile = ({ navigation }: any) => {
 export default EditProfile;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'space-between',
-  },
   avatar: {
-    width: 130,
-    height: 130,
-    borderRadius: 100,
+    width: widthPercentageToDP(30),
+    height: heightPercentageToDP(15),
+    borderRadius: 999,
   },
   editIcon: {
     right: 0,
     bottom: 0,
-    padding: 7,
-    borderRadius: 20,
+    borderRadius: 999,
     position: 'absolute',
     backgroundColor: COLORS.orange,
+    padding: widthPercentageToDP(1),
   },
   name: {
-    fontSize: 20,
-    marginTop: 8,
-    marginBottom: 30,
     fontWeight: '500',
     textAlign: 'center',
-    color: COLORS.black,
+    marginTop: heightPercentageToDP(1),
+    marginBottom: heightPercentageToDP(4),
   },
 });

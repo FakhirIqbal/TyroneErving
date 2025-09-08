@@ -1,26 +1,14 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+
 import React from 'react';
-import WrapperContainer from '../../components/common/customWrapper';
 import Header from '../../components/common/Header';
-import {
-  TextNormal,
-  TextSmall,
-  TextHuge,
-} from '../../components/common/customText';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import Customimage from '../../components/common/customImage';
+import WrapperContainer from '../../components/common/customWrapper';
+
 import { COLORS } from '../../utils/theme';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Customimage from '../../components/common/customImage';
+import { TextSmall, TextNormal } from '../../components/common/customText';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Card = ({ item }: any) => {
   return (
@@ -32,17 +20,13 @@ const Card = ({ item }: any) => {
           resizeMode="contain"
         />
         <View style={{ gap: 5 }}>
-          <TextSmall style={{ fontWeight: '300', fontSize: RFValue(14) }}>
-            {item.name}
-          </TextSmall>
+          <TextNormal textStyle={{ fontWeight: '300' }}>{item.name}</TextNormal>
           <TextSmall>
-            Size: <Text style={{ fontWeight: '300' }}>{item.size}</Text>
+            Size: <TextSmall textStyle={{ fontWeight: '300' }}>{item.size}</TextSmall>
           </TextSmall>
         </View>
       </View>
-      <TextNormal style={{ fontWeight: '300', fontSize: RFValue(14) }}>
-        ${item.price.toFixed(2)}
-      </TextNormal>
+      <TextNormal style={{ fontWeight: '300', fontSize: RFValue(14) }}>${item.price.toFixed(2)}</TextNormal>
     </View>
   );
 };
@@ -53,12 +37,13 @@ const OrderHistory = ({ navigation }: any) => {
 
   return (
     <WrapperContainer>
-      <Header title="Orders History" navigation={navigation} />
 
+      <Header title="Orders History" navigation={navigation} />
       <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
+
         <View style={styles.textContainer}>
           <TextNormal>Upcoming orders</TextNormal>
-          <TextSmall style={styles.clearText}>Clear all</TextSmall>
+          <TextSmall textStyle={{ color: COLORS.secondaryText }}>Clear all</TextSmall>
         </View>
 
         {upcoming.map((item, index) => (
@@ -66,17 +51,18 @@ const OrderHistory = ({ navigation }: any) => {
         ))}
 
         <TouchableOpacity>
-          <Text style={styles.paymentText}>Proceed Payment</Text>
+          <TextSmall textStyle={styles.paymentText}>Proceed Payment</TextSmall>
         </TouchableOpacity>
 
         <View style={[styles.textContainer, { marginTop: hp(2) }]}>
           <TextNormal>Past orders</TextNormal>
-          <TextSmall style={styles.clearText}>Clear all</TextSmall>
+          <TextSmall textStyle={{ color: COLORS.secondaryText }}>Clear all</TextSmall>
         </View>
 
         {past.map((item, index) => (
           <Card key={index} item={item} />
         ))}
+
       </ScrollView>
     </WrapperContainer>
   );
@@ -112,16 +98,10 @@ const styles = StyleSheet.create({
     height: hp(8),
   },
   paymentText: {
-    alignSelf: 'flex-end',
     color: COLORS.orange,
-    fontWeight: '600',
-    fontSize: wp(4),
+    alignSelf: 'flex-end',
     marginVertical: hp(1.5),
-  },
-  clearText: {
-    fontWeight: '300',
-    color: COLORS.secondaryText,
-  },
+  }
 });
 
 const products = [

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import {
   heightPercentageToDP as hp,
@@ -9,6 +9,7 @@ import {
 import PhoneInput from 'react-native-phone-number-input';
 import { COLORS } from '../../../utils/theme';
 import { CustomPhoneInputProp } from './interface';
+import { TextSmall } from '../customText';
 
 const CustomPhoneInput: React.FC<CustomPhoneInputProp> = ({
   label,
@@ -102,7 +103,7 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProp> = ({
 
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <TextSmall textStyle={styles.label}>{label}</TextSmall>}
 
       <PhoneInput
         disabled={disabled}
@@ -122,7 +123,7 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProp> = ({
         flagButtonStyle={styles.flagButton}
       />
 
-      {shouldShowError && <Text style={styles.errorText}>{error}</Text>}
+      {shouldShowError && <TextSmall textStyle={styles.errorText}>{error}</TextSmall>}
     </View>
   );
 };

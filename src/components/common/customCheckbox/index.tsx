@@ -3,8 +3,6 @@ import { CustomCheckboxProps } from './interface';
 import { RFValue } from 'react-native-responsive-fontsize';
 import {
   View,
-  Text,
-  TouchableOpacity,
   StyleSheet,
   Pressable,
 } from 'react-native';
@@ -12,6 +10,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import { TextNormal } from '../customText';
 
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -27,9 +26,9 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
         <View style={[styles.checkbox, value && styles.checked]}>
           {value && <Icon name="check" size={16} color={COLORS.white} />}
         </View>
-        <Text style={styles.label}>{label}</Text>
+        <TextNormal textStyle={styles.label}>{label}</TextNormal>
       </Pressable>
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && <TextNormal textStyle={styles.error}>{error}</TextNormal>}
     </View>
   );
 };

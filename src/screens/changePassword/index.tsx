@@ -15,6 +15,7 @@ import {
 import CustomInput from '../../components/common/customInput';
 import CustomHeader from '../../components/common/customHeader';
 import CustomButton from '../../components/common/customButton';
+import Header from '../../components/common/Header';
 
 type ChangePasseord = {
   password: string;
@@ -59,9 +60,9 @@ const ChangePassword = ({ navigation }: any) => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
-            <CustomHeader
+            <Header
               title="Change Password"
-              onBack={() => navigation.goBack()}
+              navigation={navigation}
             />
 
             <View

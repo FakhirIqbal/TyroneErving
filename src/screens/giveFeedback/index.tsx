@@ -1,36 +1,26 @@
-import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  ScrollView,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import { RFValue } from 'react-native-responsive-fontsize';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import { COLORS } from '../../utils/theme';
-import CustomHeader from '../../components/common/customHeader';
-import CustomButton from '../../components/common/customButton';
+import React from 'react';
 import Header from '../../components/common/Header';
+import CustomButton from '../../components/common/customButton';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import WrapperContainer from '../../components/common/customWrapper';
 
+import { useState } from 'react';
+import { COLORS } from '../../utils/theme';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { TextSmall, TextBig } from '../../components/common/customText';
+import { View, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+
+
 const GiveFeedback = ({ navigation }: any) => {
+
   const [rating, setRating] = useState(1);
   const [feedback, setFeedback] = useState('');
 
   const handleSubmit = () => {
-    const feedbackData = {
-      rating,
-      feedback,
-    };
-    console.log('Submitted Feedback:', feedbackData);
+    const feedbackData = { rating, feedback };
+    // console.log('Submitted Feedback:', feedbackData);
     navigation.goBack();
   };
 
@@ -44,7 +34,7 @@ const GiveFeedback = ({ navigation }: any) => {
 
         <View style={{ flex: 1, justifyContent: 'space-between' }}>
           <View style={{ marginTop: hp(3) }}>
-            <Text style={styles.subtitle}>How did we do?</Text>
+            <TextBig>How did we do?</TextBig>
 
             <View style={styles.stars}>
               {[...Array(5)].map((_, i) => (
@@ -67,7 +57,7 @@ const GiveFeedback = ({ navigation }: any) => {
               }}
             />
 
-            <Text style={styles.prompt}>Care to share more about it?</Text>
+            <TextSmall textStyle={{ fontWeight: '300', marginBottom: hp(1) }}>Care to share more about it?</TextSmall>
             <TextInput
               style={styles.input}
               placeholderTextColor={COLORS.secondaryText}
@@ -76,11 +66,9 @@ const GiveFeedback = ({ navigation }: any) => {
               value={feedback}
               onChangeText={setFeedback}
             />
-            <Text
-              style={{ color: COLORS.secondaryText, fontSize: RFValue(12) }}
-            >
+            <TextSmall textStyle={{ color: COLORS.secondaryText }}>
               Your review will be posted to the Google Play Store.
-            </Text>
+            </TextSmall>
           </View>
 
           <CustomButton
@@ -88,6 +76,7 @@ const GiveFeedback = ({ navigation }: any) => {
             onPress={handleSubmit}
             style={{ marginBottom: hp(4) }}
           />
+
         </View>
       </ScrollView>
     </WrapperContainer>
@@ -95,19 +84,9 @@ const GiveFeedback = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  subtitle: {
-    fontWeight: '600',
-    fontSize: RFValue(16),
-    color: COLORS.primaryText,
-  },
   stars: {
     flexDirection: 'row',
     marginVertical: hp(2),
-  },
-  prompt: {
-    fontSize: RFValue(13),
-    marginBottom: hp(1.5),
-    color: COLORS.primaryText,
   },
   input: {
     borderWidth: 1,

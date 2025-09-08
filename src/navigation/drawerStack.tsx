@@ -1,31 +1,23 @@
-import * as Screen from '../screens';
+
+import useUser from '../utils/useUser';
+import TabNavigator from './bottomStack';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Customimage from '../components/common/customImage';
 import CustomButton from '../components/common/customButton';
 
 import { COLORS } from '../utils/theme';
 import { ScreenNames } from './ScreenName';
-import { RFValue } from 'react-native-responsive-fontsize';
+import { TextSmall } from '../components/common/customText';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import TabNavigator from './bottomStack';
-import Customimage from '../components/common/customImage';
-import useUser from '../utils/useUser';
+import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = ({ navigation }: any) => {
   const { user, handleSetUser } = useUser();
+
   const menuItems = [
     {
       label: 'Orders',
@@ -61,9 +53,9 @@ const DrawerNavigator = ({ navigation }: any) => {
         <View style={styles.container}>
           <View style={styles.logoWrapper}>
             <Customimage
-              source={require('../assets/logo.png')}
-              style={styles.logo}
               resizeMode="contain"
+              style={{ width: wp(25) }}
+              source={require('../assets/logo.png')}
             />
           </View>
 
@@ -75,7 +67,7 @@ const DrawerNavigator = ({ navigation }: any) => {
                 onPress={() => navigation.navigate(item.ScreenName)}
               >
                 <Icon name={item.icon} size={26} color="#f24e1e" />
-                <Text style={styles.menuLabel}>{item.label}</Text>
+                <TextSmall textStyle={styles.menuLabel}>{item.label}</TextSmall>
                 <Icon
                   name="chevron-forward"
                   size={16}
@@ -114,23 +106,18 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
     overflow: 'hidden',
   },
-  logo: {
-    width: wp(25),
-  },
   logoWrapper: {
     height: hp(25),
-
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'center',
-
     backgroundColor: COLORS.gray,
   },
   menuLabel: {
     flex: 1,
     marginLeft: wp(2),
-    fontSize: RFValue(11),
-    color: COLORS.primaryText,
+    fontWeight: '600',
+    color: COLORS.secondaryText,
   },
   menuItem: {
     flexDirection: 'row',

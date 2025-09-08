@@ -7,7 +7,6 @@ import { COLORS } from '../../../utils/theme';
 import { RFValue } from 'react-native-responsive-fontsize';
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
@@ -16,6 +15,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import { TextSmall } from '../customText';
 
 const CustomInput = forwardRef<TextInput, CustomInputProps>(
   (
@@ -40,7 +40,7 @@ const CustomInput = forwardRef<TextInput, CustomInputProps>(
 
     return (
       <View style={styles.container}>
-        {label && <Text style={styles.label}>{label}</Text>}
+        {label && <TextSmall textStyle={styles.label}>{label}</TextSmall>}
 
         <View style={styles.inputWrapper}>
           <TextInput
@@ -73,7 +73,7 @@ const CustomInput = forwardRef<TextInput, CustomInputProps>(
           )}
         </View>
 
-        {error && <Text style={styles.errorText}>{error}</Text>}
+        {error && <TextSmall textStyle={styles.errorText}>{error}</TextSmall>}
       </View>
     );
   },
