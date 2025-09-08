@@ -1,9 +1,13 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { handleRPCPOST, showToast } from '../../utils/helper';
-import useDebounce from '../../hook/useDebounce';
 
-const useProducts = (filter: string, pageSize = 10) => {
-  const [search, setSearch] = useState('');
+const useCate = (
+  price: any,
+  frame_typee: string | null,
+  frame_materiall: string | null,
+  lens_typee: string | null,
+  pageSize = 10,
+) => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasMorePages, setHasMorePages] = useState(true);
   const [offset, setOffset] = useState<number>(0);
@@ -14,7 +18,7 @@ const useProducts = (filter: string, pageSize = 10) => {
     isRefresh: false,
   });
 
-  const debouncedValue = useDebounce(search, 300);
+  //   const debouncedValue = useDebounce(search, 300);
   const isRequestInProgress = useRef(false);
   const requestIdRef = useRef(0);
 
@@ -35,13 +39,16 @@ const useProducts = (filter: string, pageSize = 10) => {
       setIsLoading({ isRefresh, isLoadmore: !isRefresh });
 
       try {
-        const res = await handleRPCPOST('get_all_glasses', {
+        const res = await handleRPCPOST('get_glasses_filter', {
           _limit: pageSize,
           _offset: currentOffset,
-          _filter: filter,
-          _search: debouncedValue,
+          _frame_type: frame_typee,
+          _frame_material: frame_materiall,
+          _lens_type: lens_typee,
+          _price_range: price,
         });
-        console.log('Ressss', res);
+        console.log('Res', res);
+
         if (requestIdRef.current !== currentRequestId) return;
 
         if (res?.error) {
@@ -70,26 +77,24 @@ const useProducts = (filter: string, pageSize = 10) => {
         isRequestInProgress.current = false;
       }
     },
-    [filter, debouncedValue, offset, hasMorePages, isLoading, pageSize],
+    [offset, hasMorePages, isLoading, pageSize],
   );
 
   useEffect(() => {
     getAll(true);
-  }, [filter, debouncedValue]);
+  }, [price]);
 
   return {
     allProducts,
     initialLoading,
     isLoadmore: () => getAll(false),
     refetchProduct: () => {
-      setSearch(''), getAll(true);
+      getAll(true);
     },
     isLoading,
     hasMorePages,
     error,
-    setSearch,
-    search,
   };
 };
 
-export default useProducts;
+export default useCate;
