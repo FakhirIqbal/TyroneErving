@@ -1,4 +1,3 @@
-
 import React from 'react';
 import useProducts from './useProducts';
 import HomeHeader from '../../components/homeHeader';
@@ -16,16 +15,25 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { addToWishlist } from '../../redux/features/whishList';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { TextNormal, TextSmaller } from '../../components/common/customText';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, StyleSheet, RefreshControl, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {
+  View,
+  StyleSheet,
+  RefreshControl,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 
 const Home = ({ navigation }: any) => {
-
   const TABBARHEIGHT = useBottomTabBarHeight();
   const dispatch = useDispatch();
-  
-  const categories = ['All', 'New Arrivals', 'male', 'female'];
+
+  const categories = ['All', 'New Arrivals', 'Male', 'Female'];
   const [selected, setSelected] = useState('All');
 
   const {
@@ -99,12 +107,12 @@ const Home = ({ navigation }: any) => {
             onChangeText={setSearch}
             placeholderTextColor={COLORS.darkGray}
           />
-          <Feather
+          {/* <Feather
             name="sliders"
             size={RFValue(14)}
             color={COLORS.orange}
             style={{ marginRight: 10 }}
-          />
+          /> */}
         </View>
         <FlatList
           horizontal
@@ -174,7 +182,9 @@ const Home = ({ navigation }: any) => {
           ) : null
         }
         ListEmptyComponent={
-          <TextNormal style={{ color: '#000', alignSelf: 'center', marginTop: hp(15) }}>
+          <TextNormal
+            style={{ color: '#000', alignSelf: 'center', marginTop: hp(15) }}
+          >
             No product found
           </TextNormal>
         }

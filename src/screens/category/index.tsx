@@ -6,7 +6,6 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  ImageSourcePropType,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
@@ -20,7 +19,6 @@ import { COLORS } from '../../utils/theme';
 
 import Slider from '@react-native-community/slider';
 import CustomHeading from '../../components/customHeading';
-import CustomHeader from '../../components/common/customHeader';
 import ProductCard from '../../components/productCard';
 import Header from '../../components/common/Header';
 import WrapperContainer from '../../components/common/customWrapper';
@@ -51,25 +49,17 @@ const frameMaterials = [
   { name: 'Mixed', image: require('../../assets/cardImage/shades.png') },
 ];
 
-const lensTypes = [
-  'Progressive lenses',
-  'Trifocal lenses',
-  'Polarized lenses',
-  'Progressive lenses',
-];
+const lensTypes = ['Progressive lenses', 'Trifocal lenses', 'Polarized lenses'];
 
 const Category = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const TABBARHEIGHT = useBottomTabBarHeight();
   const [price, setPrice] = useState(50);
-  const [selectedFrameTypes, setSelectedFrameTypes] = useState<string | null>(
-    null,
-  );
-  const [selectedFrameMaterials, setSelectedFrameMaterials] = useState<
-    string | null
-  >(null);
-  const [selectedLensType, setSelectedLensType] = useState<string | null>(null);
-  console.log('s', selectedFrameMaterials);
+  const [filters, setfliter] = useState({
+    frame_type: null,
+    frame_material: null,
+    frame_lens: null,
+  });
   const {
     allProducts,
     error,
@@ -80,9 +70,9 @@ const Category = ({ navigation }: any) => {
     refetchProduct,
   } = useCate(
     price,
-    selectedFrameTypes,
-    selectedFrameMaterials,
-    selectedLensType,
+    filters.frame_type,
+    filters.frame_material,
+    filters.frame_lens,
   );
 
   const addCart = useCallback(
@@ -92,6 +82,16 @@ const Category = ({ navigation }: any) => {
     },
     [dispatch],
   );
+  const handleSelect = useCallback(
+    (name: keyof typeof filters, value: string) => {
+      setfliter(prev => ({
+        ...prev,
+        [name]: prev[name] === value ? null : value,
+      }));
+    },
+    [],
+  );
+
   const headerComp = useMemo(
     () => (
       <>
@@ -102,58 +102,44 @@ const Category = ({ navigation }: any) => {
           reverse
           style={styles.sectionHeading}
         />
-        <FlatList
+
+        <HorizontalSelection
           data={frameTypes}
-          horizontal={true} // If you want horizontal scrolling
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={item => item.name}
-          renderItem={({ item, index }) => (
-            <HorizontalSelection
-              onPress={() => setSelectedFrameTypes(item.name)}
-              item={item}
-              index={index}
-              selected={selectedFrameTypes}
-            />
-          )}
+          selectedValue={filters.frame_type}
+          onSelect={(val: string) => handleSelect('frame_type', val)}
         />
 
         <CustomHeading text="Frame Materials" style={styles.sectionHeading} />
 
-        <FlatList
+        <HorizontalSelection
           data={frameMaterials}
-          horizontal={true} // If you want horizontal scrolling
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={item => item.name}
-          renderItem={({ item, index }) => (
-            <HorizontalSelection
-              onPress={() => setSelectedFrameMaterials(item.name)}
-              item={item}
-              index={index}
-              selected={selectedFrameMaterials}
-            />
-          )}
+          selectedValue={filters.frame_material}
+          onSelect={(val: string) => handleSelect('frame_material', val)}
         />
 
         <CustomHeading text="Lens Type" reverse style={styles.sectionHeading} />
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {lensTypes.map((item, index) => {
-            const isSelected = selectedLensType === item;
+            const isSelected = filters.frame_lens === item;
             return (
-              <Text
+              <TouchableOpacity
                 key={index.toString()}
-                style={[
-                  styles.lensText,
-                  isSelected && {
-                    backgroundColor: COLORS.orange,
-                    color: COLORS.white,
-                    fontWeight: '600',
-                  },
-                ]}
-                onPress={() => setSelectedLensType(item)}
+                onPress={() => handleSelect('frame_lens', item)}
               >
-                {item}
-              </Text>
+                <Text
+                  style={[
+                    styles.lensText,
+                    isSelected && {
+                      backgroundColor: COLORS.orange,
+                      color: COLORS.white,
+                      fontWeight: '600',
+                    },
+                  ]}
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
@@ -187,8 +173,9 @@ const Category = ({ navigation }: any) => {
         </View>
       </>
     ),
-    [frameMaterials, selectedFrameMaterials, selectedFrameTypes],
+    [navigation, filters, price, handleSelect],
   );
+
   const renderItem = useCallback(
     ({ item }: any) => (
       <ProductCard
@@ -199,8 +186,12 @@ const Category = ({ navigation }: any) => {
         navigation={navigation}
       />
     ),
-    [dispatch, addCart],
+    [dispatch, addCart, navigation],
   );
+
+  const keyExtractor = useCallback((item: any, index: number) => {
+    return item?.id?.toString() || index.toString();
+  }, []);
 
   return (
     <WrapperContainer>
@@ -224,7 +215,7 @@ const Category = ({ navigation }: any) => {
         numColumns={2}
         data={allProducts}
         renderItem={renderItem}
-        keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+        keyExtractor={keyExtractor}
         windowSize={5}
         maxToRenderPerBatch={8}
         initialNumToRender={6}
@@ -251,11 +242,13 @@ const Category = ({ navigation }: any) => {
           ) : null
         }
         ListEmptyComponent={
-          <TextNormal
-            style={{ color: '#000', alignSelf: 'center', marginTop: hp(5) }}
-          >
-            No product found
-          </TextNormal>
+          isLoading.isRefresh ? null : (
+            <TextNormal
+              style={{ color: '#000', alignSelf: 'center', marginTop: hp(5) }}
+            >
+              No product found
+            </TextNormal>
+          )
         }
       />
     </WrapperContainer>
@@ -320,11 +313,3 @@ const styles = StyleSheet.create({
     borderRadius: wp(2),
   },
 });
-
-// const products = Array.from({ length: 6 }).map((_, index) => ({
-//   id: (index + 1).toString(),
-//   name: 'OH-12',
-//   price: 2495,
-//   image: require('../../assets/cardImage/shades.png'),
-//   fav: false,
-// }));

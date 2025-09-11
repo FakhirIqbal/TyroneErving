@@ -3,7 +3,7 @@ type Product = {
   base_price: any;
   id: string;
   name: string;
-  price: number;
+  price_range: number;
   image: any;
   fav: boolean;
 };

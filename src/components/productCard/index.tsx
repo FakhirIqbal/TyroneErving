@@ -205,9 +205,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             >
               {item?.name}
             </TextNormal>
-            <TextNormal textStyle={styles.productPrice}>
-              ${item?.base_price?.toFixed(2)}
-            </TextNormal>
+            <Text style={styles.productPrice}>
+              ${item?.price_range?.toFixed(2)}
+            </Text>
           </View>
         </Pressable>
         <View style={styles.actions}>

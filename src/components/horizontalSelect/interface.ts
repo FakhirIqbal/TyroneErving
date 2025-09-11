@@ -1,10 +1,9 @@
 import { ImageSourcePropType } from 'react-native';
 
 export type HorizontalCardListProps = {
-  item: any;
-  index: any;
-  selected: string | any;
-  onPress: () => void;
+  selectedValue?: any;
+  onSelect?: any;
+  data: CardItem[];
 };
 type CardItem = {
   name: string;

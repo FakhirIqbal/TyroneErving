@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { handleRPCPOST, showToast } from '../../utils/helper';
+import useDebounce from '../../hook/useDebounce';
 
 const useCate = (
   price: any,
@@ -18,10 +19,19 @@ const useCate = (
     isRefresh: false,
   });
 
-  //   const debouncedValue = useDebounce(search, 300);
+  const frame_typeeDebounce = useDebounce(frame_typee, 1000);
+  const frameMaterialDebounce = useDebounce(frame_materiall, 1000);
+  const lensDebounce = useDebounce(lens_typee, 1000);
+  const priceDebounce = useDebounce(price, 1000);
+
   const isRequestInProgress = useRef(false);
   const requestIdRef = useRef(0);
-
+  console.log('first', {
+    frameMaterialDebounce,
+    frame_typeeDebounce,
+    lensDebounce,
+    priceDebounce,
+  });
   const getAll = useCallback(
     async (isRefresh: boolean) => {
       if (isRequestInProgress.current) return;
@@ -40,12 +50,12 @@ const useCate = (
 
       try {
         const res = await handleRPCPOST('get_glasses_filter', {
+          _frame_type: frame_typeeDebounce,
+          _frame_material: frameMaterialDebounce,
+          _lens_type: lensDebounce,
+          _price_range: priceDebounce,
           _limit: pageSize,
           _offset: currentOffset,
-          _frame_type: frame_typee,
-          _frame_material: frame_materiall,
-          _lens_type: lens_typee,
-          _price_range: price,
         });
         console.log('Res', res);
 
@@ -77,12 +87,21 @@ const useCate = (
         isRequestInProgress.current = false;
       }
     },
-    [offset, hasMorePages, isLoading, pageSize],
+    [
+      offset,
+      hasMorePages,
+      isLoading,
+      pageSize,
+      frameMaterialDebounce,
+      priceDebounce,
+      lensDebounce,
+      frame_typeeDebounce,
+    ],
   );
 
   useEffect(() => {
     getAll(true);
-  }, [price]);
+  }, [frameMaterialDebounce, priceDebounce, lensDebounce, frame_typeeDebounce]);
 
   return {
     allProducts,
