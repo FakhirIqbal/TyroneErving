@@ -1,60 +1,46 @@
-import { useCallback, useMemo, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  View,
-  ScrollView,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import { COLORS } from '../../utils/theme';
 
-import Slider from '@react-native-community/slider';
-import CustomHeading from '../../components/customHeading';
-import ProductCard from '../../components/productCard';
-import Header from '../../components/common/Header';
-import WrapperContainer from '../../components/common/customWrapper';
-import Customimage from '../../components/common/customImage';
-import { TextNormal, TextSmall } from '../../components/common/customText';
-import { addToWishlist } from '../../redux/features/whishList';
-import { addToCart } from '../../redux/features/addCart';
-import { useDispatch } from 'react-redux';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import useCate from './useCate';
+import Header from '../../components/common/Header';
+import Slider from '@react-native-community/slider';
+import ProductCard from '../../components/productCard';
+import CustomHeading from '../../components/customHeading';
+import WrapperContainer from '../../components/common/customWrapper';
+
+import { useDispatch } from 'react-redux';
+import { COLORS } from '../../utils/theme';
 import { Font } from '../../utils/ImagePath';
+import { useCallback, useMemo, useState } from 'react';
+import { addToCart } from '../../redux/features/addCart';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { addToWishlist } from '../../redux/features/whishList';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { HorizontalSelection } from '../../components/horizontalSelect';
+import { TextNormal, TextSmall } from '../../components/common/customText';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { View, Text, FlatList, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 const frameTypes = [
   { name: 'Rimless', image: require('../../assets/cardImage/shades.png') },
   { name: 'Full Rimmed', image: require('../../assets/cardImage/shades.png') },
   { name: 'Semi Rimless', image: require('../../assets/cardImage/shades.png') },
-  {
-    name: 'Double Rimless',
-    image: require('../../assets/cardImage/shades.png'),
-  },
+  { name: 'Double Rimless', image: require('../../assets/cardImage/shades.png') },
 ];
-
 const frameMaterials = [
+  { name: 'Mixed', image: require('../../assets/cardImage/shades.png') },
   { name: 'Plastic', image: require('../../assets/cardImage/shades.png') },
   { name: 'Acetate', image: require('../../assets/cardImage/shades.png') },
   { name: 'Wood Texture', image: require('../../assets/cardImage/shades.png') },
-  { name: 'Mixed', image: require('../../assets/cardImage/shades.png') },
 ];
-
 const lensTypes = ['Progressive lenses', 'Trifocal lenses', 'Polarized lenses'];
 
+
+
 const Category = ({ navigation }: any) => {
+
   const dispatch = useDispatch();
   const TABBARHEIGHT = useBottomTabBarHeight();
-  const [price, setPrice] = useState(50);
+
+  const [price, setPrice] = useState(1000);
   const [filters, setfliter] = useState({
     frame_type: null,
     frame_material: null,
@@ -82,6 +68,7 @@ const Category = ({ navigation }: any) => {
     },
     [dispatch],
   );
+
   const handleSelect = useCallback(
     (name: keyof typeof filters, value: string) => {
       setfliter(prev => ({
@@ -175,7 +162,6 @@ const Category = ({ navigation }: any) => {
     ),
     [navigation, filters, price, handleSelect],
   );
-
   const renderItem = useCallback(
     ({ item }: any) => (
       <ProductCard
@@ -188,7 +174,6 @@ const Category = ({ navigation }: any) => {
     ),
     [dispatch, addCart, navigation],
   );
-
   const keyExtractor = useCallback((item: any, index: number) => {
     return item?.id?.toString() || index.toString();
   }, []);
@@ -198,7 +183,7 @@ const Category = ({ navigation }: any) => {
       <FlatList
         refreshControl={
           <RefreshControl
-            refreshing={isLoading.isRefresh}
+            refreshing={isLoading.isLoadmore}
             onRefresh={refetchProduct}
             tintColor={'#c4c4c4'}
           />
@@ -224,16 +209,17 @@ const Category = ({ navigation }: any) => {
             <ActivityIndicator color={'#000'} size={hp(3)} />
           ) : !isLoading.isLoadmore &&
             !isLoading.isRefresh &&
-            !hasMorePages &&
+            !hasMorePages && 
             allProducts.length ? (
             <TextNormal
               style={{
                 color: '#000',
                 textAlign: 'center',
                 fontFamily: Font.medium,
+                marginTop: hp(2),
               }}
             >
-              You have reached the end !
+              No More Product Available!
             </TextNormal>
           ) : error && !isLoading.isLoadmore && !isLoading.isRefresh ? (
             <TextNormal style={{ color: 'red', alignSelf: 'center' }}>
@@ -242,11 +228,13 @@ const Category = ({ navigation }: any) => {
           ) : null
         }
         ListEmptyComponent={
-          isLoading.isRefresh ? null : (
-            <TextNormal
-              style={{ color: '#000', alignSelf: 'center', marginTop: hp(5) }}
-            >
-              No product found
+          isLoading.isRefresh || initialLoading ? (
+            <View style={{ flex: 1, justifyContent: 'center', marginTop: hp(5) }}>
+              <ActivityIndicator color={'#000'} size={10} />
+            </View>
+          ) : (
+            <TextNormal style={{ color: '#000', alignSelf: 'center', marginTop: hp(5) }}>
+              We couldn’t find a match.
             </TextNormal>
           )
         }
@@ -254,8 +242,8 @@ const Category = ({ navigation }: any) => {
     </WrapperContainer>
   );
 };
-
 export default Category;
+
 
 const styles = StyleSheet.create({
   container: {

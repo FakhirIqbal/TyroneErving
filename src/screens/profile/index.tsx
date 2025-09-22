@@ -43,11 +43,11 @@ const menuItems = [
     label: 'Terms & Conditions',
     screenName: ScreenNames.TERMS_AND_CONDITION,
   },
-  {
-    icon: 'chatbubble-ellipses-outline',
-    label: 'Give Feedback',
-    screenName: ScreenNames.GIVE_FEEDBACK,
-  },
+  // {
+  //   icon: 'chatbubble-ellipses-outline',
+  //   label: 'Give Feedback',
+  //   screenName: ScreenNames.GIVE_FEEDBACK,
+  // },
 ];
 
 const Profile = ({ navigation }: any) => {
@@ -100,6 +100,8 @@ const Profile = ({ navigation }: any) => {
     </View>
   );
 };
+export default Profile;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -156,5 +158,3 @@ const styles = StyleSheet.create({
     color: COLORS.secondaryText,
   },
 });
-
-export default Profile;

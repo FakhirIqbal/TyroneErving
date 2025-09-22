@@ -14,7 +14,7 @@ import { addToCart } from '../../redux/features/addCart';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { addToWishlist } from '../../redux/features/whishList';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { TextNormal, TextSmaller } from '../../components/common/customText';
+import { TextBig, TextNormal, TextSmaller } from '../../components/common/customText';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -30,6 +30,7 @@ import {
 } from 'react-native';
 
 const Home = ({ navigation }: any) => {
+
   const TABBARHEIGHT = useBottomTabBarHeight();
   const dispatch = useDispatch();
 
@@ -89,47 +90,44 @@ const Home = ({ navigation }: any) => {
     [selected],
   );
 
-  const headerComp = useMemo(
-    () => (
-      <>
-        <HomeHeader navigation={navigation} />
-        <View style={styles.searchContainer}>
-          <Feather
-            name="search"
-            size={RFValue(14)}
-            color={COLORS.orange}
-            style={{ marginLeft: 10 }}
-          />
-          <TextInput
-            placeholder="Search for *Sunglasses*"
-            style={styles.input}
-            value={search}
-            onChangeText={setSearch}
-            placeholderTextColor={COLORS.darkGray}
-          />
-          {/* <Feather
+  const headerComp = useMemo(() => (
+    <>
+      <HomeHeader navigation={navigation} />
+      <View style={styles.searchContainer}>
+        <Feather
+          name="search"
+          size={RFValue(14)}
+          color={COLORS.orange}
+          style={{ marginLeft: 10 }}
+        />
+        <TextInput
+          placeholder="Search for *Sunglasses*"
+          style={styles.input}
+          value={search}
+          onChangeText={setSearch}
+          placeholderTextColor={COLORS.darkGray}
+        />
+        {/* <Feather
             name="sliders"
             size={RFValue(14)}
             color={COLORS.orange}
             style={{ marginRight: 10 }}
           /> */}
-        </View>
-        <FlatList
-          horizontal
-          data={categories}
-          renderItem={renderCategoryItem}
-          keyExtractor={item => item}
-          showsHorizontalScrollIndicator={false}
-          style={styles.categoryScroll}
-        />
-        <HomeBanner />
-      </>
-    ),
-    [navigation, categories, renderCategoryItem],
-  );
+      </View>
+      <FlatList
+        horizontal
+        data={categories}
+        renderItem={renderCategoryItem}
+        keyExtractor={item => item}
+        showsHorizontalScrollIndicator={false}
+        style={styles.categoryScroll}
+      />
+      <HomeBanner />
+    </>
+  ), [navigation, categories, renderCategoryItem]);
 
-  const allData = useMemo(
-    () => (initialLoading ? Array(6).fill(undefined) : allProducts || []),
+  const allData = useMemo(() => (
+    initialLoading ? Array(6).fill(undefined) : allProducts || []),
     [initialLoading, allProducts],
   );
 
@@ -138,7 +136,7 @@ const Home = ({ navigation }: any) => {
       <FlatList
         refreshControl={
           <RefreshControl
-            refreshing={isLoading.isRefresh}
+            refreshing={isLoading.isLoadmore}
             onRefresh={refetchProduct}
             tintColor={'#c4c4c4'}
           />
@@ -182,18 +180,29 @@ const Home = ({ navigation }: any) => {
           ) : null
         }
         ListEmptyComponent={
-          <TextNormal
-            style={{ color: '#000', alignSelf: 'center', marginTop: hp(15) }}
-          >
-            No product found
-          </TextNormal>
+          isLoading.isRefresh ? (
+            <ActivityIndicator color={'#000'} size={hp(5)} />
+          ) : (
+            <View style={{ justifyContent: 'center', height: '50%' }} >
+              <TextNormal
+                style={{
+                  color: '#000',
+                  textAlign: 'center',
+                  fontSize: RFValue(12),
+                  fontFamily: Font.semiBold,
+                }}
+              >
+                Oops! No glasses match your filters
+              </TextNormal>
+            </View>
+          )
         }
       />
     </WrapperContainer>
   );
 };
-
 export default Home;
+
 
 const styles = StyleSheet.create({
   searchContainer: {
